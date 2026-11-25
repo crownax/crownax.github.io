@@ -505,54 +505,7 @@ var GL={
   sempre:"всегда",mai:"никогда",ieri:"вчера",oggi:"сегодня",domani:"завтра",stasera:"сегодня вечером"
 };
 
-var GR=[
-  ["1. Правила чтения и ударения","• C + e, i = «ч» (ciao, cena), иначе «к» (casa, come).
-• CH + e, i = «к» (che, perché, spaghetti).
-• G + e, i = «дж» (gelato, giorno), иначе «г» (gatto).
-• GH + e, i = «г» (funghi).
-• SC + e, i = «ш» (pesce, uscire).
-• GLI = мягкое «ль» (famiglia, figlio).
-• GN = «нь» (gnocchi, bagno).
-• Двойные согласные читаются длинно и чётко (mamma, pizza, anno).
-• Ударение в 80% слов падает на предпоследний слог. Если на последний — ставится знак ударения (caffè, città, lunedì)."],
-  ["2. Артикли (определённый и неопределённый)","Определённый артикль (конкретный предмет):
-• м.р. ед.ч.: il (il libro), lo (перед z, s+согл.: lo zaino, lo studente), l’ (перед гласной: l’uomo).
-• м.р. мн.ч.: i (i libri), gli (gli uomini, gli studenti).
-• ж.р. ед.ч.: la (la casa), l’ (перед гласной: l’acqua).
-• ж.р. мн.ч.: le (le case, le acque).
-
-Неопределённый артикль (один из многих):
-• м.р.: un (un libro, un uomo), uno (uno zaino).
-• ж.р.: una (una casa), un’ (перед гласной: un’amica)."],
-  ["3. Род и множественное число","• Слова на -o → м.р., во мн.ч. -i (ragazzo → ragazzi).
-• Слова на -a → ж.р., во мн.ч. -e (ragazza → ragazze).
-• Слова на -e → бывают м.р. и ж.р., во мн.ч. всегда -i (padre → padri, madre → madri).
-• Слова с ударением на конце не меняются во мн.ч. (un caffè → due caffè, la città → le città)."],
-  ["4. Правописание и апострофы","• Не путайте è (он/она есть — с ударением) и e (союз «и» — без ударения).
-• Не путайте sì (да — с ударением) и si (возвратная частица — без ударения).
-• Слияние предлогов с артиклями:
-  a + il = al, a + la = alla, a + l’ = all’
-  in + il = nel, in + la = nella
-  su + il = sul, su + la = sulla
-  di + il = del, di + la = della"],
-  ["5. Глаголы essere и avere","ESSERE (быть, являться):
-io sono, tu sei, lui/lei è, noi siamo, voi siete, loro sono.
-
-AVERE (иметь, владеть — буква H не читается!):
-io ho, tu hai, lui/lei ha, noi abbiamo, voi avete, loro hanno.
-Используется также для возраста (Ho 20 anni) и состояний (Ho fame — я голоден, Ho freddo — мне холодно)."],
-  ["6. Настоящее время (Presente)","Три группы правильных глаголов:
-• -ARE (parlare): -o, -i, -a, -iamo, -ate, -ano
-• -ERE (prendere): -o, -i, -e, -iamo, -ete, -ono
-• -IRE (dormire): -o, -i, -e, -iamo, -ite, -ono
-Часть глаголов на -ire (capire, finire, preferire) перед окончаниями -o, -i, -e, -ono вставляют -isc-: capisco, capisci, capisce, capiamo, capite, capiscono."],
-  ["7. Прошедшее время (Passato prossimo)","Образуется из 2 частей: вспомогательный глагол (avere или essere) + причастие:
-• -are → -ato (mangiato)
-• -ere → -uto (avuto)
-• -ire → -ito (dormito)
-Неправильные причастия: fare → fatto, vedere → visto, prendere → preso, aprire → aperto, scrivere → scritto.
-С глаголом essere причастие согласуется в роде и числе: Marco è andato / Anna è andata."]
-];
+var GR=[["1. Правила чтения и ударения", "• C + e, i = «ч» (ciao, cena), иначе «к» (casa, come).\n• CH + e, i = «к» (che, perché, spaghetti).\n• G + e, i = «дж» (gelato, giorno), иначе «г» (gatto).\n• GH + e, i = «г» (funghi).\n• SC + e, i = «ш» (pesce, uscire).\n• GLI = мягкое «ль» (famiglia, figlio).\n• GN = «нь» (gnocchi, bagno).\n• Двойные согласные читаются длинно и чётко (mamma, pizza, anno).\n• Ударение в 80% слов падает на предпоследний слог. Если на последний — ставится знак ударения (caffè, città, lunedì)."], ["2. Артикли (определённый и неопределённый)", "Определённый артикль (конкретный предмет):\n• м.р. ед.ч.: il (il libro), lo (перед z, s+согл.: lo zaino, lo studente), l’ (перед гласной: l’uomo).\n• м.р. мн.ч.: i (i libri), gli (gli uomini, gli studenti).\n• ж.р. ед.ч.: la (la casa), l’ (перед гласной: l’acqua).\n• ж.р. мн.ч.: le (le case, le acque).\n\nНеопределённый артикль (один из многих):\n• м.р.: un (un libro, un uomo), uno (uno zaino).\n• ж.р.: una (una casa), un’ (перед гласной: un’amica)."], ["3. Род и множественное число", "• Слова на -o → м.р., во мн.ч. -i (ragazzo → ragazzi).\n• Слова на -a → ж.р., во мн.ч. -e (ragazza → ragazze).\n• Слова на -e → бывают м.р. и ж.р., во мн.ч. всегда -i (padre → padri, madre → madri).\n• Слова с ударением на конце не меняются во мн.ч. (un caffè → due caffè, la città → le città)."], ["4. Правописание и апострофы", "• Не путайте è (он/она есть — с ударением) и e (союз «и» — без ударения).\n• Не путайте sì (да — с ударением) и si (возвратная частица — без ударения).\n• Слияние предлогов с артиклями:\n  a + il = al, a + la = alla, a + l’ = all’\n  in + il = nel, in + la = nella\n  su + il = sul, su + la = sulla\n  di + il = del, di + la = della"], ["5. Глаголы essere и avere", "ESSERE (быть, являться):\nio sono, tu sei, lui/lei è, noi siamo, voi siete, loro sono.\n\nAVERE (иметь, владеть — буква H не читается!):\nio ho, tu hai, lui/lei ha, noi abbiamo, voi avete, loro hanno.\nИспользуется также для возраста (Ho 20 anni) и состояний (Ho fame — я голоден, Ho freddo — мне холодно)."], ["6. Настоящее время (Presente)", "Три группы правильных глаголов:\n• -ARE (parlare): -o, -i, -a, -iamo, -ate, -ano\n• -ERE (prendere): -o, -i, -e, -iamo, -ete, -ono\n• -IRE (dormire): -o, -i, -e, -iamo, -ite, -ono\nЧасть глаголов на -ire (capire, finire, preferire) перед окончаниями -o, -i, -e, -ono вставляют -isc-: capisco, capisci, capisce, capiamo, capite, capiscono."], ["7. Прошедшее время (Passato prossimo)", "Образуется из 2 частей: вспомогательный глагол (avere или essere) + причастие:\n• -are → -ato (mangiato)\n• -ere → -uto (avuto)\n• -ire → -ito (dormito)\nНеправильные причастия: fare → fatto, vedere → visto, prendere → preso, aprire → aperto, scrivere → scritto.\nС глаголом essere причастие согласуется в роде и числе: Marco è andato / Anna è andata."]];
 
 function gram(){gback=view;view="gram";render();window.scrollTo(0,0)}
 function rGram(){
@@ -888,6 +841,7 @@ function importAll(){
 }
 
 if(tg){try{tg.ready();tg.expand()}catch(e){}}
+try{render();}catch(e){document.getElementById("app").innerHTML="<pre style='padding:16px;white-space:pre-wrap'>"+e+"</pre>";}
 load(function(){
   save();
   render();
