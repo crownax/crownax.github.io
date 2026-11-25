@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>Итальянские карточки</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1f2430;--mut:#6b7280;--card:#fff;--ac:#2f7d5b;--acfg:#fff;--bad:#c0392b;--bd:#e5e0d6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -33,9 +34,16 @@ var KEY="ital-cards-v1";
 var D={lessons:[
 {id:1,name:"Урок 1 — Приветствия",words:[["Ciao","Привет / пока"],["Buongiorno","Доброе утро / добрый день"],["Buonasera","Добрый вечер"],["Arrivederci","До свидания"],["Grazie","Спасибо"],["Prego","Пожалуйста"],["Scusi","Извините"],["Sì","Да"],["No","Нет"]]},
 {id:2,name:"Урок 2 — Числа",words:[["uno","один"],["due","два"],["tre","три"],["quattro","четыре"],["cinque","пять"],["sei","шесть"],["sette","семь"],["otto","восемь"],["nove","девять"],["dieci","десять"]]}
-].map(function(l){l.words=l.words.map(function(w){return{it:w[0],ru:w[1]}});return l})};
-try{var s=localStorage.getItem(KEY);if(s){var p=JSON.parse(s);if(p&&p.lessons)D=p}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+].map(function(l){l.words=l.words.map(function(w){return{it:w[0],ru:w[1],em:""}});return l})};
+var tg=window.Telegram&&Telegram.WebApp,CS=tg&&tg.CloudStorage&&tg.initData?tg.CloudStorage:null;
+var BOT_LINK="";/* например: https://t.me/mybot/cards — нужна для ссылок «Поделиться уроком» */
+function fromLocal(){try{var s=localStorage.getItem(KEY);if(s){var p=JSON.parse(s);if(p&&p.lessons)D=p}}catch(e){}}
+var SEED3={id:3,name:"Урок 3 — Еда, животные и фразы",words:[["gatto","кот","🐱"],["cane","собака","🐶"],["pane","хлеб","🍞"],["acqua","вода","💧"],["latte","молоко","🥛"],["mela","яблоко","🍎"],["caffè","кофе","☕"],["casa","дом","🏠"]].map(function(w){return{it:w[0],ru:w[1],em:w[2]}}),sents:[["Io sono Marco","Я Марко"],["Il gatto beve il latte","Кот пьёт молоко"],["Io ho un cane","У меня есть собака"],["Non ho acqua","У меня нет воды"],["La mela è rossa","Яблоко красное"]].map(function(x){return{it:x[0],ru:x[1]}})};
+function save(){var j=JSON.stringify(D);try{localStorage.setItem(KEY,j)}catch(e){}
+if(!CS)return;var parts=[],i;for(i=0;i<j.length;i+=1200)parts.push(j.slice(i,i+1200));
+var o={n:String(parts.length)};parts.forEach(function(x,k){o["d"+k]=x});
+try{CS.setItems(o,function(){var old=[];for(var k=parts.length;k<parts.length+40;k++)old.push("d"+k);CS.removeItems(old)})}catch(e){}}
+function load(cb){fromLocal();if(!CS){cb();return}try{CS.getItem("n",function(err,v){var n=parseInt(v,10);if(err||!n){cb();return}var ks=[];for(var k=0;k<n;k++)ks.push("d"+k);CS.getItems(ks,function(e2,r){try{if(!e2){var j=ks.map(function(k){return r[k]||""}).join("");var p=JSON.parse(j);if(p&&p.lessons)D=p}}catch(e){}cb()})})}catch(e){cb()}}
 function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 var view="home",cur=null,mode="mix",S=null,app=document.getElementById("app");
 function L(){return D.lessons.find(function(l){return l.id===cur})}
@@ -44,8 +52,8 @@ function say(t){try{var u=new SpeechSynthesisUtterance(t);u.lang="it-IT";u.rate=
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 function addLesson(){var n=document.getElementById("ln").value.trim();if(!n)return;var id=Date.now();D.lessons.push({id:id,name:n,words:[]});save();go("lesson",id)}
 function delLesson(){if(confirm("Удалить урок со всеми словами?")){D.lessons=D.lessons.filter(function(l){return l.id!==cur});save();go("home")}}
-function addWord(){var a=document.getElementById("wi").value.trim(),b=document.getElementById("wr").value.trim();if(!a||!b)return;L().words.push({it:a,ru:b});save();render();document.getElementById("wi").focus()}
-function addBulk(){var t=document.getElementById("bk").value.split("\n"),n=0;t.forEach(function(r){var m=r.split(/\s*[-–—=;:\t]\s*/);if(m.length>=2&&m[0].trim()&&m[1].trim()){L().words.push({it:m[0].trim(),ru:m.slice(1).join(" - ").trim()});n++}});if(n){save();render()}else alert("Формат: слово - перевод, по одному в строке")}
+function addWord(){var a=document.getElementById("wi").value.trim(),b=document.getElementById("wr").value.trim();if(!a||!b)return;L().words.push({it:a,ru:b,em:document.getElementById("we").value.trim()});save();render();document.getElementById("wi").focus()}
+function addBulk(){var t=document.getElementById("bk").value.split("\n"),n=0;t.forEach(function(r){var m=r.split(/\s*[-–—=;:\t]\s*/),em="";if(m.length>=3&&/^[^\p{L}\p{N}]+$/u.test(m[m.length-1].trim()))em=m.pop().trim();if(m.length>=2&&m[0].trim()&&m[1].trim()){L().words.push({it:m[0].trim(),ru:m.slice(1).join(" - ").trim(),em:em});n++}});if(n){save();render()}else alert("Формат: слово - перевод, по одному в строке")}
 function delWord(i){L().words.splice(i,1);save();render()}
 function setMode(m){mode=m;render()}
 function start(){var w=L().words;if(!w.length)return;S={q:shuffle(w).map(function(x){return{w:x,side:mode==="mix"?(Math.random()<.5?"it":"ru"):mode}}),n:w.length,flip:false,known:0};view="study";render()}
@@ -54,28 +62,81 @@ function answer(ok){var c=S.q.shift();if(ok)S.known++;else{c.side=c.side;S.q.pus
 function copyText(t,msg){try{navigator.clipboard.writeText(t).then(function(){alert(msg)},function(){prompt("Скопируйте вручную:",t)})}catch(e){prompt("Скопируйте вручную:",t)}}
 function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
 function dec(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return JSON.parse(decodeURIComponent(escape(atob(s))))}
-function shareLesson(){var l=L();copyText(location.href.split("#")[0]+"#l="+enc({name:l.name,words:l.words}),"Ссылка на урок скопирована. Отправьте её в Телеграм.")}
+function shareLesson(){var l=L(),p=enc({name:l.name,words:l.words,sents:l.sents||[]});if(BOT_LINK&&p.length<=500)copyText(BOT_LINK+"?startapp="+p,"Ссылка скопирована. Отправьте её в Телеграм.");else copyText(p,"Код урока скопирован. Отправьте его в Телеграм, а получатель вставит его в «Копия и перенос слов».")}
 function exportAll(){var t=document.getElementById("bkp");t.value=enc(D);t.select();copyText(t.value,"Копия скопирована")}
-function mergeIn(o){var ls=o.lessons||[{name:o.name,words:o.words}],n=0;ls.forEach(function(l){if(l&&l.name&&Array.isArray(l.words)){D.lessons.push({id:Date.now()+n,name:String(l.name),words:l.words.filter(function(w){return w&&w.it&&w.ru}).map(function(w){return{it:String(w.it),ru:String(w.ru)}})});n++}});save();return n}
+function mergeIn(o){var ls=o.lessons||[{name:o.name,words:o.words}],n=0;ls.forEach(function(l){if(l&&l.name&&Array.isArray(l.words)){D.lessons.push({id:Date.now()+n,name:String(l.name),words:l.words.filter(function(w){return w&&w.it&&w.ru}).map(function(w){return{it:String(w.it),ru:String(w.ru),em:w.em?String(w.em):""}}),sents:(l.sents||[]).filter(function(x){return x&&x.it&&x.ru}).map(function(x){return{it:String(x.it),ru:String(x.ru)}})});n++}});save();return n}
 function importAll(){var v=document.getElementById("bkp").value.trim().replace(/^.*#l=/,"");try{var n=mergeIn(dec(v));alert("Добавлено уроков: "+n);render()}catch(e){alert("Не удалось прочитать код. Вставьте его целиком.")}}
-function checkHash(){var m=location.hash.match(/^#l=(.+)$/);if(!m)return;try{var o=dec(m[1]);if(confirm("Добавить урок «"+o.name+"» ("+o.words.length+" сл.)?")){mergeIn(o);view="home";render()}}catch(e){}history.replaceState(null,"",location.pathname+location.search)}
+function checkHash(){var m=location.hash.match(/^#l=(.+)$/),sp=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param,c=m?m[1]:sp;if(!c)return;try{var o=dec(c);if(confirm("Добавить урок «"+o.name+"» ("+o.words.length+" сл.)?")){mergeIn(o);view="home";render()}}catch(e){}history.replaceState(null,"",location.pathname+location.search)}
 try{navigator.storage.persist()}catch(e){}
+var hard=false,P=null,gback="home";
+var GL={io:"я",tu:"ты",lui:"он",lei:"она (или вежливое «вы»)",noi:"мы",voi:"вы",loro:"они",sono:"я есть / они есть (essere)",sei:"ты есть (essere); также число 6",è:"он/она есть (essere)",siamo:"мы есть",ho:"у меня есть (avere); h не читается",hai:"у тебя есть",ha:"у него/неё есть",hanno:"у них есть",il:"артикль м.р. перед согласной",lo:"артикль м.р. перед s+согласной, z",la:"артикль ж.р.",l:"артикль перед гласной (l’acqua)",i:"артикль мн.ч. м.р.",gli:"артикль мн.ч. м.р. перед гласной",le:"артикль мн.ч. ж.р.",un:"неопределённый артикль м.р. («один»)",una:"неопределённый артикль ж.р.",non:"«не», ставится перед глаголом",e:"«и»",di:"«из, о, чей»",con:"«с»",per:"«для, ради»",che:"«что, который»",come:"«как»",dove:"«где»",beve:"он/она пьёт (bere)",stai:"ты себя чувствуешь (stare): Come stai? — Как дела?"};
+var GR=[["Произношение","c перед e, i читается как «ч»: ciao — «чао». c перед a, o, u — «к»: casa.\ng перед e, i — «дж»: gelato. ch и gh дают «к» и «г»: che, spaghetti.\nsc перед e, i — «ш»: pesce. gli — как мягкое «ль»: figlio. gn — «нь»: gnocchi.\nДвойные согласные тянутся дольше: pala и palla. Ударение чаще на предпоследнем слоге."],["Род и число существительных","Слова на -o обычно мужского рода (gatto), на -a женского (casa), на -e бывают оба (pane — м., notte — ж.).\nМножественное число: -o → -i (gatto → gatti), -a → -e (casa → case), -e → -i (pane → pani)."],["Артикли","Определённый: il (il gatto), lo перед s+согласная и z (lo zaino), l’ перед гласной (l’acqua), la (la casa). Во мн.ч.: i, gli, le.\nНеопределённый: un (un gatto), uno (uno zaino), una (una casa), un’ перед гласной у ж.р. (un’amica)."],["Глагол essere (быть)","io sono, tu sei, lui/lei è, noi siamo, voi siete, loro sono.\nIo sono Marco — Я Марко. Отрицание: non перед глаголом — Non sono Marco."],["Глагол avere (иметь)","io ho, tu hai, lui/lei ha, noi abbiamo, voi avete, loro hanno. Буква h не читается.\n«У меня есть кот» — Ho un gatto. «У меня нет воды» — Non ho acqua."],["Вопросы","Порядок слов не меняется, меняется интонация: Hai un gatto? — У тебя есть кот?\nCome — как, dove — где, che cosa — что, quando — когда, perché — почему/потому что, chi — кто.\nCome stai? — Как дела? (на «ты»), Come sta? (на «вы»)."],["«Ты» и «вы»","tu — на «ты», Lei — вежливое «вы»: Come sta, signora?\nscusa — извини (на «ты»), scusi — извините (на «вы»).\nBuongiorno — до вечера, buonasera — вечером, ciao — привет и пока (с близкими)."]];
+function gram(){gback=view;view="gram";render()}
+function rGram(){var h='<button class="l" onclick="go(gback)">← Назад</button><h1>📖 Грамматика</h1><p class="mut">Нажмите на тему, чтобы открыть объяснение.</p>';GR.forEach(function(g){h+='<details><summary>'+g[0]+'</summary><div style="white-space:pre-line;padding:4px 0 8px">'+g[1]+'</div></details>'});app.innerHTML=h}
+function norm(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\p{L}\p{N} ]/gu,"").replace(/\s+/g," ").trim()}
+function addSent(){var a=document.getElementById("si").value.trim(),b=document.getElementById("sr").value.trim();if(!a||!b)return;var l=L();l.sents=l.sents||[];l.sents.push({it:a,ru:b});save();render()}
+function delSent(i){L().sents.splice(i,1);save();render()}
+function A(c){return c.side==="it"?c.w.ru:c.w.it}
+function allw(){var w=[];D.lessons.forEach(function(x){w=w.concat(x.words)});return w}
+function play(t){var l=L(),w=t==="pics"?l.words.filter(function(x){return x.em}):t==="sent"?(l.sents||[]):l.words;
+if(!w.length){alert(t==="pics"?"Добавьте слова с картинкой-эмодзи.":t==="sent"?"Добавьте предложения в уроке.":"В уроке нет слов.");return}
+var pl=l.words.length>=4?l.words:allw();
+P={t:t,q:shuffle(w).map(function(x){return{w:x,side:t==="pics"?"em":mode==="mix"?(Math.random()<.5?"it":"ru"):mode}}),i:0,n:w.length,ok:0,err:[],res:null,pool:pl,hard:hard};setQ();view="game";render()}
+function setQ(){P.res=null;P.hint=false;P.ch=[];P.ex="";P.pick=null;if(P.i>=P.q.length)return;var c=P.q[P.i];
+if(P.t==="sent"){P.tk=c.w.it.split(/\s+/);P.ord=shuffle(P.tk.map(function(_,i){return i}))}
+else if(!P.hard){var o=[A(c)];shuffle(P.pool).forEach(function(x){var a=c.side==="it"?x.ru:x.it;if(o.length<4&&o.indexOf(a)<0)o.push(a)});P.opts=shuffle(o)}}
+function fin(ok){if(ok)P.ok++;else P.err.push(P.q[P.i]);P.res=ok;render()}
+function ansOpt(i){if(P.res!==null)return;P.pick=P.opts[i];fin(P.pick===A(P.q[P.i]))}
+function ansType(){if(P.res!==null)return;var v=document.getElementById("ty").value;if(!v.trim())return;P.pick=v;fin(A(P.q[P.i]).split("/").some(function(x){return norm(x)===norm(v)}))}
+function tap(i){if(P.res!==null)return;P.ch.push(i);render()}
+function untap(k){if(P.res!==null)return;P.ch.splice(k,1);render()}
+function chk(){fin(norm(P.ch.map(function(i){return P.tk[i]}).join(" "))===norm(P.q[P.i].w.it))}
+function nxt(){P.i++;setQ();render()}
+function again(){P.q=shuffle(P.err);P.n=P.q.length;P.err=[];P.ok=0;P.i=0;setQ();render()}
+function hint(){P.hint=!P.hint;render()}
+function ex(i){var t=P.tk[i],k=t.toLowerCase().replace(/[^\p{L}]/gu,""),g=GL[k];if(!g){var m=allw().find(function(x){return norm(x.it)===norm(t)});g=m?"«"+m.ru+"» (из ваших слов)":"подсказки нет. Добавьте слово в словарь урока."}P.ex=t+" — "+g;render()}
+function rGame(){
+if(P.i>=P.q.length){var h='<h1>Готово! 🎉</h1><p>Верно с первого раза: '+P.ok+' из '+P.n+'</p>';if(P.err.length)h+='<button class="p" style="width:100%;margin-bottom:8px" onclick="again()">Повторить ошибки ('+P.err.length+')</button>';app.innerHTML=h+'<button style="width:100%" onclick="go(\'lesson\')">К уроку</button>';return}
+var c=P.q[P.i],r=P.res,h='<div class="row" style="margin-bottom:12px"><button class="l" style="flex:0 0 auto" onclick="go(\'lesson\')">← Выйти</button><span class="mut" style="text-align:right">'+(P.i+1)+' / '+P.q.length+'</span></div><div class="bar"><i style="width:'+(P.i/P.q.length*100)+'%"></i></div>';
+var ans=P.t==="sent"?c.w.it:A(c),hn;
+if(P.t==="sent"){
+h+='<div class="card" style="cursor:default"><div class="lb">Соберите по-итальянски</div><div class="t" style="font-size:24px">'+esc(c.w.ru)+'</div></div>';
+h+='<div style="min-height:56px;border-bottom:2px solid var(--bd);padding:6px 0;margin-bottom:12px">'+P.ch.map(function(i,k){return '<button style="margin:3px" onclick="untap('+k+')">'+esc(P.tk[i])+'</button>'}).join('')+'</div>';
+if(r===null){h+=P.ord.filter(function(i){return P.ch.indexOf(i)<0}).map(function(i){return '<button style="margin:3px" onclick="tap('+i+')">'+esc(P.tk[i])+'</button>'}).join('');if(P.ch.length===P.tk.length)h+='<button class="p" style="width:100%;margin-top:12px" onclick="chk()">Проверить</button>'}
+hn="Первое слово: «"+P.tk[0]+"». Слов в предложении: "+P.tk.length+". Подробнее — в разделе «Грамматика».";
+}else{
+var pr=c.side==="em"?'<div style="font-size:72px;line-height:1.1">'+esc(c.w.em)+'</div>':'<div class="t">'+esc(c.side==="it"?c.w.it:c.w.ru)+'</div>';
+h+='<div class="card" style="cursor:default"><div class="lb">'+(c.side==="em"?"Что это? Назовите по-итальянски":c.side==="it"?"Переведите на русский":"Переведите на итальянский")+'</div>'+pr+'</div>';
+if(P.hard){h+='<input id="ty" placeholder="Введите ответ" autocapitalize="off" autocomplete="off" '+(r!==null?'disabled value="'+esc(P.pick)+'"':'')+' onkeydown="if(event.key===\'Enter\')ansType()">';if(r===null)h+='<button class="p" style="width:100%" onclick="ansType()">Проверить</button>'}
+else h+=P.opts.map(function(o,i){var st=r!==null?(o===ans?' style="background:var(--ac);color:var(--acfg)"':(o===P.pick?' style="border-color:var(--bad);color:var(--bad)"':'')):'';return '<button class="item"'+st+' onclick="ansOpt('+i+')">'+esc(o)+'</button>'}).join('');
+var a0=ans.split("/")[0].trim();hn="Начинается на «"+a0.slice(0,2)+"…», букв: "+a0.length+".";
+}
+if(r!==null){h+='<p style="font-weight:600;color:'+(r?'var(--ac)':'var(--bad)')+'">'+(r?'✅ Верно!':'❌ Правильно: '+esc(ans))+'</p>';
+if(P.t==="sent")h+='<p class="mut">Нажмите на слово, чтобы узнать, что оно значит:</p><div>'+P.tk.map(function(t,i){return '<button style="margin:3px" onclick="ex('+i+')">'+esc(t)+'</button>'}).join('')+'</div>'+(P.ex?'<p>'+esc(P.ex)+'</p>':'');
+h+='<button class="p" style="width:100%;margin-top:12px" onclick="nxt()">Дальше</button>'}
+else if(P.hint)h+='<p class="mut" style="margin-top:12px">💡 '+esc(hn)+'</p>';
+h+='<div class="row" style="margin-top:12px"><button onclick="hint()">💡 Подсказка</button><button onclick="gram()">📖 Грамматика</button>'+((P.t!=="sent"&&(c.side==="it"||r!==null))||P.t==="sent"&&r!==null?'<button onclick="say(\''+(P.t==="sent"?'':'')+'\'+P.q[P.i].w.it)">🔊</button>':'')+'</div>';
+app.innerHTML=h}
 function render(){
+if(view==="game"){rGame();return}if(view==="gram"){rGram();return}
 if(view==="home"){
 var h='<h1>🇮🇹 Итальянские карточки</h1>';
 D.lessons.forEach(function(l){h+='<button class="item" onclick="go(\'lesson\','+l.id+')"><span>'+esc(l.name)+'</span><span class="mut">'+l.words.length+' сл.</span></button>'});
+h+='<button class="item" onclick="gram()"><span>📖 Грамматика и подсказки</span><span class="mut">›</span></button>';
 h+='<h2 style="margin-top:20px">Новый урок</h2><input id="ln" placeholder="Например: Урок 3 — Еда"><button class="p" style="width:100%" onclick="addLesson()">Создать урок</button>';
 h+='<details style="margin-top:20px"><summary>Копия и перенос слов</summary><textarea id="bkp" rows="4" placeholder="Код копии"></textarea><div class="row"><button onclick="exportAll()">Скопировать всё</button><button onclick="importAll()">Импортировать</button></div></details>';
 app.innerHTML=h;return}
 if(view==="lesson"){
 var l=L(),h='<button class="l" onclick="go(\'home\')">← Все уроки</button><h1>'+esc(l.name)+'</h1>';
 h+='<div class="row seg" style="margin-bottom:8px"><button class="'+(mode==="it"?"on":"")+'" onclick="setMode(\'it\')">Итал. → рус.</button><button class="'+(mode==="ru"?"on":"")+'" onclick="setMode(\'ru\')">Рус. → итал.</button><button class="'+(mode==="mix"?"on":"")+'" onclick="setMode(\'mix\')">Вперемешку</button></div>';
-h+='<button class="p" style="width:100%;margin-bottom:16px" onclick="start()"'+(l.words.length?'':' disabled')+'>Учить ('+l.words.length+')</button>';
-h+='<h2>Добавить слово</h2><div style="margin-top:8px"><input id="wi" placeholder="По-итальянски" autocapitalize="off"><input id="wr" placeholder="По-русски"><button class="p" style="width:100%" onclick="addWord()">Добавить</button></div>';
-h+='<details><summary>Добавить сразу много слов</summary><textarea id="bk" rows="5" placeholder="gatto - кошка&#10;cane - собака"></textarea><button style="width:100%" onclick="addBulk()">Добавить списком</button></details>';
+var dis=l.words.length?'':' disabled';
+h+='<button class="p" style="width:100%;margin-bottom:8px" onclick="start()"'+dis+'>🃏 Карточки ('+l.words.length+')</button><div class="row" style="margin-bottom:8px"><button onclick="play(\'quiz\')"'+dis+'>🔤 Выбор перевода</button><button onclick="play(\'pics\')">🖼 Картинки</button></div><div class="row" style="margin-bottom:8px"><button onclick="play(\'sent\')">🧩 Предложения</button><button onclick="gram()">📖 Грамматика</button></div><label class="mut" style="display:block;margin-bottom:16px"><input type="checkbox" style="width:auto;margin:0 8px 0 0" '+(hard?'checked':'')+' onchange="hard=this.checked">Сложный режим: вводить ответ с клавиатуры</label>';
+h+='<h2>Добавить слово</h2><div style="margin-top:8px"><input id="wi" placeholder="По-итальянски" autocapitalize="off"><input id="wr" placeholder="По-русски"><input id="we" placeholder="Картинка-эмодзи, необязательно (🐱)"><button class="p" style="width:100%" onclick="addWord()">Добавить</button></div>';
+h+='<details><summary>Добавить сразу много слов</summary><textarea id="bk" rows="5" placeholder="gatto - кошка - 🐱&#10;cane - собака"></textarea><button style="width:100%" onclick="addBulk()">Добавить списком</button></details>';
+h+='<details><summary>Предложения ('+(l.sents||[]).length+')</summary><input id="si" placeholder="Предложение по-итальянски"><input id="sr" placeholder="Перевод на русский"><button class="p" style="width:100%;margin-bottom:8px" onclick="addSent()">Добавить предложение</button>'+(l.sents||[]).map(function(x,i){return '<div class="w"><div><b>'+esc(x.it)+'</b><span class="mut">'+esc(x.ru)+'</span></div><button class="x d" onclick="delSent('+i+')">✕</button></div>'}).join('')+'</details>';
 h+='<h2 style="margin-top:12px">Слова</h2>';
 if(!l.words.length)h+='<p class="mut">Пока пусто — добавьте первое слово.</p>';
-l.words.forEach(function(w,i){h+='<div class="w"><div><b>'+esc(w.it)+'</b><span class="mut">'+esc(w.ru)+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" onclick="say(L().words['+i+'].it)">🔊</button><button class="x d" onclick="delWord('+i+')">✕</button></div></div>'});
+l.words.forEach(function(w,i){h+='<div class="w"><div><b>'+(w.em?esc(w.em)+' ':'')+esc(w.it)+'</b><span class="mut">'+esc(w.ru)+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" onclick="say(L().words['+i+'].it)">🔊</button><button class="x d" onclick="delWord('+i+')">✕</button></div></div>'});
 h+='<button style="width:100%;margin-top:24px" onclick="shareLesson()">Поделиться уроком (ссылкой)</button>';
 h+='<button class="d" style="width:100%;margin-top:8px" onclick="delLesson()">Удалить урок</button>';
 app.innerHTML=h;return}
@@ -90,5 +151,6 @@ h+='</div><button style="width:100%;margin-bottom:8px" onclick="say(S.q[0].w.it)
 if(S.flip)h+='<div class="row"><button class="d" onclick="answer(false)">Не знаю</button><button class="p" onclick="answer(true)">Знаю</button></div>';
 app.innerHTML=h;return}
 }
-render();checkHash();
+if(tg){try{tg.ready();tg.expand()}catch(e){}}
+load(function(){if(!D.v2){D.v2=1;if(!D.lessons.some(function(l){return l.id===3}))D.lessons.push(SEED3);save()}render();checkHash()});
 </script></body></html>
