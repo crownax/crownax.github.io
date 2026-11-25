@@ -4,171 +4,231 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<title>Итальянские карточки</title>
+<title>Italiano · Курс 3 месяца</title>
 <style>
 :root{
-  --bg:#faf7f2;
-  --fg:#1f2430;
-  --mut:#6b7280;
-  --card:#fff;
-  --ac:#2f7d5b;
-  --acfg:#fff;
-  --warn:#d97706;
-  --bad:#c0392b;
-  --bd:#e5e0d6;
-  color-scheme:light;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px)
+  --bg-grad: radial-gradient(circle at 12% 10%, #d9f2e6 0%, transparent 45%),
+             radial-gradient(circle at 88% 18%, #fde6d8 0%, transparent 42%),
+             radial-gradient(circle at 50% 92%, #dce8fa 0%, transparent 50%),
+             #f2f5f8;
+  --fg: #111827;
+  --mut: #4b5563;
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.78);
+  --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --ac: #00875a;
+  --ac-grad: linear-gradient(135deg, #009e69, #00734d);
+  --acfg: #ffffff;
+  --warn: #d97706;
+  --bad: #dc2626;
+  --pill: rgba(15, 23, 42, 0.06);
+  color-scheme: light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#15181e;--fg:#eceef2;--mut:#9aa1ad;--card:#20242c;
-    --ac:#4cae86;--acfg:#0d1a14;--warn:#f59e0b;--bad:#e5645a;--bd:#323844;
-    color-scheme:dark
+    --bg-grad: radial-gradient(circle at 15% 12%, #12382c 0%, transparent 48%),
+               radial-gradient(circle at 85% 20%, #3b231d 0%, transparent 45%),
+               radial-gradient(circle at 50% 90%, #172742 0%, transparent 52%),
+               #0b0f17;
+    --fg: #f3f4f6;
+    --mut: #9ca3af;
+    --glass: rgba(24, 31, 44, 0.62);
+    --glass-strong: rgba(30, 39, 56, 0.82);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-shadow: 0 10px 34px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    --ac: #34d399;
+    --ac-grad: linear-gradient(135deg, #10b981, #059669);
+    --acfg: #041f15;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --pill: rgba(255, 255, 255, 0.08);
+    color-scheme: dark;
   }
 }
-:root[data-theme="dark"]{
-  --bg:#15181e;--fg:#eceef2;--mut:#9aa1ad;--card:#20242c;
-  --ac:#4cae86;--acfg:#0d1a14;--warn:#f59e0b;--bad:#e5645a;--bd:#323844;
-  color-scheme:dark
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg-grad);
+  background-attachment:fixed;
+  color:var(--fg);
+  font:16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
-#app{max-width:560px;margin:0 auto;padding:16px 16px 40px}
-h1{font-size:24px;margin:8px 0 16px;line-height:1.25}
-h2{font-size:19px;margin:0}
+#app{max-width:580px;margin:0 auto;padding:16px 16px 64px}
+
+/* Liquid Glass Containers (iOS 26 style) */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  border-radius:24px;
+}
+.glass-sm{
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  border-radius:16px;
+}
+
+h1{font-size:26px;font-weight:700;letter-spacing:-0.02em;margin:6px 0 14px;line-height:1.2}
+h2{font-size:18px;font-weight:700;letter-spacing:-0.01em;margin:0}
+.mut{color:var(--mut);font-size:14px}
+
 button,input,textarea{font:inherit;color:inherit}
-button{border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:12px 16px;cursor:pointer;transition:transform .06s,opacity .15s}
-button:active{transform:scale(0.98)}
-button:disabled{opacity:.45;cursor:not-allowed;transform:none}
-button.p{background:var(--ac);color:var(--acfg);border-color:var(--ac);font-weight:600}
+button{
+  background:var(--glass-strong);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 2px 10px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.45);
+  border-radius:16px;
+  padding:12px 16px;
+  cursor:pointer;
+  transition:transform .12s cubic-bezier(.2,.8,.2,1), box-shadow .15s, opacity .15s;
+}
+button:active{transform:scale(0.97)}
+button:disabled{opacity:.42;cursor:not-allowed;transform:none}
+button.p{
+  background:var(--ac-grad);
+  color:var(--acfg);
+  border:1px solid rgba(255,255,255,0.3);
+  font-weight:600;
+  box-shadow:0 6px 20px rgba(0,135,90,0.28), inset 0 1px 0 rgba(255,255,255,0.4);
+}
 button.d{color:var(--bad)}
-button.l{border:0;background:none;color:var(--mut);padding:8px 0}
-input,textarea{width:100%;border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:12px;margin:0 0 8px}
+button.l{border:0;background:none;box-shadow:none;backdrop-filter:none;color:var(--mut);padding:6px 0;font-weight:500}
+
+input,textarea{
+  width:100%;
+  background:var(--glass-strong);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  padding:12px 14px;
+  margin:0 0 8px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);
+}
 input:focus,textarea:focus{outline:2px solid var(--ac);border-color:transparent}
+
 .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
-.item{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;margin-bottom:8px;gap:12px}
-.mut{color:var(--mut);font-size:15px}
-.seg button{padding:10px 6px;font-size:15px}
-.seg button.on{background:var(--ac);color:var(--acfg);border-color:var(--ac);font-weight:600}
-.w{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd)}
-.w b{display:block}.w .x{flex:0 0 auto;padding:6px 10px;font-size:15px}
-.card{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px;margin:16px 0;cursor:pointer;user-select:none;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-.card .t{font-size:32px;font-weight:700;word-break:break-word}
-.card .lb{font-size:14px;color:var(--mut);margin-bottom:10px}
-.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac);transition:width .25s ease}
-details{margin:12px 0;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px}
-summary{cursor:pointer;color:var(--ac);padding:4px 0;font-weight:500}
-.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bd);color:var(--fg);font-weight:600;white-space:nowrap}
-.badge.ok{background:rgba(47,125,91,.15);color:var(--ac)}
-.badge.due{background:rgba(217,119,6,.16);color:var(--warn)}
+.item{
+  display:flex;justify-content:space-between;align-items:center;
+  width:100%;text-align:left;margin-bottom:10px;gap:12px;
+  padding:14px 16px;border-radius:20px;
+}
+
+/* Tabs / Segmented Controls */
+.seg{
+  display:flex;gap:4px;padding:4px;border-radius:16px;
+  background:var(--pill);border:1px solid var(--glass-border);
+}
+.seg button{
+  flex:1;border:0;background:transparent;box-shadow:none;backdrop-filter:none;
+  padding:8px 6px;font-size:14px;border-radius:12px;font-weight:500;
+}
+.seg button.on{
+  background:var(--glass-strong);
+  color:var(--fg);
+  font-weight:700;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Word list */
+.w{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:12px 14px;margin-bottom:8px;border-radius:18px;
+  background:var(--glass);border:1px solid var(--glass-border);
+}
+.w b{display:block;font-size:17px}
+.w .tr{font-size:13px;color:var(--ac);font-weight:500}
+.w .x{flex:0 0 auto;padding:7px 11px;font-size:15px;border-radius:12px}
+
+/* Flashcard */
+.card{
+  min-height:245px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:26px;margin:16px 0;cursor:pointer;user-select:none;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:45%;
+  background:linear-gradient(180deg, rgba(255,255,255,0.32), transparent);
+  pointer-events:none;
+}
+.card .t{font-size:32px;font-weight:800;letter-spacing:-0.02em;word-break:break-word}
+.card .tr{font-size:16px;color:var(--ac);font-weight:600;margin-top:6px}
+.card .lb{font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut);margin-bottom:10px;font-weight:600}
+
+.bar{height:8px;background:var(--pill);border-radius:99px;overflow:hidden;border:1px solid var(--glass-border)}
+.bar i{display:block;height:100%;background:var(--ac-grad);border-radius:99px;transition:width .3s ease}
+
+details{margin:10px 0;padding:10px 14px;border-radius:18px}
+summary{cursor:pointer;color:var(--ac);padding:4px 0;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 10px;border-radius:99px;background:var(--pill);font-weight:600;white-space:nowrap}
+.badge.ok{background:rgba(16,185,129,.18);color:var(--ac)}
+.badge.due{background:rgba(245,158,11,.18);color:var(--warn)}
+.badge.xp{background:linear-gradient(135deg, rgba(245,158,11,.22), rgba(234,88,12,.18));color:var(--warn);font-size:13px}
+
 .chars{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.chars button{padding:6px 12px;font-size:16px;border-radius:8px;font-weight:600}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:15px;z-index:99;box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .2s}
-.toast.show{opacity:1}
+.chars button{padding:6px 12px;font-size:16px;border-radius:10px;font-weight:600}
+
+.rule-box{
+  padding:14px 16px;margin-bottom:14px;border-radius:20px;
+  white-space:pre-line;font-size:14.5px;line-height:1.5;
+}
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:var(--glass-strong);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  color:var(--fg);padding:10px 20px;border-radius:99px;font-size:14px;font-weight:600;
+  z-index:99;opacity:0;pointer-events:none;transition:all .22s ease;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast" class="toast"></div>
 <script>
-var KEY="ital-cards-v2";
+var KEY="ital-course-3m-v1";
 var DAY=86400000;
-var D={
-  v2:1,
-  lessons:[
-    {
-      id:1,
-      name:"Урок 1 — Приветствия",
-      words:[
-        ["Ciao","Привет / пока","👋"],
-        ["Buongiorno","Доброе утро / добрый день","☀️"],
-        ["Buonasera","Добрый вечер","🌆"],
-        ["Arrivederci","До свидания","🤝"],
-        ["Grazie","Спасибо","🙏"],
-        ["Prego","Пожалуйста","😊"],
-        ["Scusi","Извините","🙋"],
-        ["Sì","Да","✅"],
-        ["No","Нет","❌"]
-      ],
-      sents:[
-        ["Ciao, come stai?","Привет, как дела?"],
-        ["Buongiorno, signora!","Доброе утро, синьора!"],
-        ["Grazie mille!","Большое спасибо!"]
-      ]
-    },
-    {
-      id:2,
-      name:"Урок 2 — Числа",
-      words:[
-        ["uno","один","1️⃣"],
-        ["due","два","2️⃣"],
-        ["tre","три","3️⃣"],
-        ["quattro","четыре","4️⃣"],
-        ["cinque","пять","5️⃣"],
-        ["sei","шесть","6️⃣"],
-        ["sette","семь","7️⃣"],
-        ["otto","восемь","8️⃣"],
-        ["nove","девять","9️⃣"],
-        ["dieci","десять","🔟"]
-      ],
-      sents:[
-        ["Ho due gatti","У меня два кота"],
-        ["Tre caffè, per favore","Три кофе, пожалуйста"]
-      ]
-    },
-    {
-      id:3,
-      name:"Урок 3 — Еда, животные и фразы",
-      words:[
-        ["gatto","кот","🐱"],
-        ["cane","собака","🐶"],
-        ["pane","хлеб","🍞"],
-        ["acqua","вода","💧"],
-        ["latte","молоко","🥛"],
-        ["mela","яблоко","🍎"],
-        ["caffè","кофе","☕"],
-        ["casa","дом","🏠"]
-      ],
-      sents:[
-        ["Io sono Marco","Я Марко"],
-        ["Il gatto beve il latte","Кот пьёт молоко"],
-        ["Io ho un cane","У меня есть собака"],
-        ["Non ho acqua","У меня нет воды"],
-        ["La mela è rossa","Яблоко красное"]
-      ]
-    },
-    {
-      id:4,
-      name:"Урок 4 — В кафе и ресторане",
-      words:[
-        ["il conto","счёт","🧾"],
-        ["il tavolo","столик","🪑"],
-        ["il vino","вино","🍷"],
-        ["la pizza","пицца","🍕"],
-        ["la pasta","паста","🍝"],
-        ["il gelato","мороженое","🍨"],
-        ["buono","вкусный / хороший","😋"],
-        ["caldo","горячий","🔥"],
-        ["freddo","холодный","🧊"]
-      ],
-      sents:[
-        ["Vorrei un caffè, per favore","Я бы хотел кофе, пожалуйста"],
-        ["Il conto, per favore","Счёт, пожалуйста"],
-        ["La pizza è molto buona","Пицца очень вкусная"]
-      ]
-    }
-  ].map(function(l){
-    l.words=l.words.map(function(w){return{it:w[0],ru:w[1],em:w[2]||"",lv:0,due:0}});
-    l.sents=(l.sents||[]).map(function(x){return{it:x[0],ru:x[1]}});
-    return l;
-  })
-};
+var RAW_LESSONS=[{"id": 1, "m": 1, "name": "Тема 1. Звуки и чтение", "rule": "Буквы C и G меняют звук:\n• C + e, i = «ч» (cena — че́на, ciao — ча́о)\n• C + a, o, u, согласная = «к» (casa — ка́за)\n• CH + e, i = «к» (che — ке, spaghetti — спаге́тти)\n• G + e, i = «дж» (gelato — джела́то)\n• GH + e, i = «г» (funghi — фу́нги)\n• SC + e, i = «ш» (pesce — пе́ше)\n• GLI = мягкое «ль» (famiglia — фами́лья)\n• GN = «нь» (gnocchi — ньо́кки)\nДвойные согласные произносятся чётко и долго (mamma, pizza).", "words": [["casa", "дом", "🏠", "ка́за"], ["cena", "ужин", "🍽️", "че́на"], ["gelato", "мороженое", "🍨", "джела́то"], ["spaghetti", "спагетти", "🍝", "спаге́тти"], ["mamma", "мама", "👩", "ма́мма"], ["nonno", "дедушка", "👴", "но́нно"], ["pizza", "пицца", "🍕", "пи́цца"], ["pesce", "рыба", "🐟", "пе́ше"], ["famiglia", "семья", "👨‍👩‍👧‍👦", "фами́лья"], ["gnocchi", "ньокки (клёцки)", "🥟", "ньо́кки"]], "sents": [["La pizza è buona", "Пицца вкусная"], ["Mangio gelato a cena", "Я ем мороженое на ужин"], ["La mia famiglia è grande", "Моя семья большая"]]}, {"id": 2, "m": 1, "name": "Тема 2. Первые слова и приветствия", "rule": "Приветствия зависят от времени суток и дистанции:\n• Ciao — привет и пока (только на «ты»)\n• Buongiorno — доброе утро / добрый день (универсально)\n• Buonasera — добрый вечер (после 17–18 часов)\n• Buonanotte — спокойной ночи\n• Scusa (на «ты») / Scusi (на «вы») — извини(те)\n• Prego — пожалуйста (в ответ на «спасибо» или при предложении пройти/сесть)\n• Per favore — пожалуйста (при просьбе)", "words": [["Ciao", "привет / пока", "👋", "ча́о"], ["Buongiorno", "добрый день / утро", "☀️", "буонджо́рно"], ["Buonasera", "добрый вечер", "🌆", "буонасе́ра"], ["Buonanotte", "доброй ночи", "🌙", "буонано́тте"], ["Per favore", "пожалуйста (просьба)", "🙏", "пер фаво́ре"], ["Grazie", "спасибо", "💐", "гра́цие"], ["Prego", "пожалуйста / не за что", "😊", "прэ́го"], ["Scusi", "извините (на «вы»)", "🙋", "ску́зи"], ["Scusa", "извини (на «ты»)", "🤷", "ску́за"], ["Sì", "да", "✅", "си"], ["No", "нет", "❌", "но"]], "sents": [["Ciao, come stai?", "Привет, как ты?"], ["Buongiorno, come sta?", "Добрый день, как вы?"], ["Bene, grazie!", "Хорошо, спасибо!"], ["Un caffè, per favore", "Кофе, пожалуйста"]]}, {"id": 3, "m": 1, "name": "Тема 3. Знакомство и глагол essere", "rule": "Личные местоимения и глагол ESSERE (быть):\n• io sono — я есть\n• tu sei — ты есть\n• lui / lei è — он / она есть\n• noi siamo — мы есть\n• voi siete — вы есть\n• loro sono — они есть\nВ итальянском местоимения (io, tu...) часто опускают, так как окончание глагола само указывает на лицо: Sono di Russia — Я из России.", "words": [["Mi chiamo", "меня зовут", "🏷️", "ми кья́мо"], ["Come ti chiami?", "как тебя зовут?", "❓", "ко́ме ти кья́ми"], ["Piacere", "приятно познакомиться", "🤝", "пьяче́ре"], ["sono", "я есть / они есть", "👤", "со́но"], ["sei", "ты есть", "👉", "сэ́й"], ["è", "он/она есть", "☝️", "э"], ["siamo", "мы есть", "👥", "сья́мо"], ["siete", "вы есть", "🙌", "сье́те"], ["Parli inglese?", "ты говоришь по-английски?", "🇬🇧", "па́рли ингле́зе"], ["un po’", "немного", "🤏", "ун по"]], "sents": [["Ciao, mi chiamo Marco", "Привет, меня зовут Марко"], ["Sono di Russia", "Я из России"], ["Abito a Helsinki", "Я живу в Хельсинки"], ["Parlo un po’ di italiano", "Я немного говорю по-итальянски"]]}, {"id": 4, "m": 1, "name": "Тема 4. Числа, возраст и цены", "rule": "Числа и возраст:\n• Для возраста используется глагол AVERE (иметь): Ho 25 anni — Мне 25 лет (буквально: «я имею 25 лет»).\n• Десятки: 20 venti, 30 trenta, 40 quaranta, 50 cinquanta, 60 sessanta, 70 settanta, 80 ottanta, 90 novanta, 100 cento.\n• Перед uno и otto конечная гласная десятка выпадает: ventuno (21), ventotto (28).", "words": [["zero", "ноль", "0️⃣", "дзе́ро"], ["uno", "один", "1️⃣", "у́но"], ["due", "два", "2️⃣", "ду́э"], ["tre", "три", "3️⃣", "трэ"], ["quattro", "четыре", "4️⃣", "куа́ттро"], ["cinque", "пять", "5️⃣", "чи́нкуэ"], ["sei", "шесть", "6️⃣", "сэ́й"], ["sette", "семь", "7️⃣", "сэ́тте"], ["otto", "восемь", "8️⃣", "о́тто"], ["nove", "девять", "9️⃣", "но́ве"], ["dieci", "десять", "🔟", "дье́чи"], ["venti", "двадцать", "🔢", "ве́нти"], ["cento", "сто", "💯", "че́нто"], ["Quanto costa?", "сколько стоит?", "💶", "куа́нто ко́ста"]], "sents": [["Ho venticinque anni", "Мне двадцать пять лет"], ["Quanto costa questo?", "Сколько это стоит?"], ["Costa dieci euro", "Это стоит десять евро"]]}, {"id": 5, "m": 1, "name": "Тема 5. Дни, месяцы, время", "rule": "Дни недели и время:\n• Все дни недели (кроме domenica — ж.р.) мужского рода и пишутся с маленькой буквы: lunedì, martedì, mercoledì, giovedì, venerdì, sabato, domenica.\n• Названия месяцев тоже пишутся с маленькой буквы: gennaio, febbraio, marzo, aprile, maggio, giugno, luglio, agosto, settembre, ottobre, novembre, dicembre.\n• Который час: Che ore sono? — Sono le tre (Три часа). Но для часа дня: È l’una.", "words": [["lunedì", "понедельник", "📅", "лунеди́"], ["martedì", "вторник", "📅", "мартеди́"], ["mercoledì", "среда", "📅", "мерколеди́"], ["giovedì", "четверг", "📅", "джоведи́"], ["venerdì", "пятница", "🎉", "венерди́"], ["sabato", "суббота", "🛋️", "са́бато"], ["domenica", "воскресенье", "☀️", "доме́ника"], ["oggi", "сегодня", "👇", "о́дджи"], ["domani", "завтра", "➡️", "дома́ни"], ["ieri", "вчера", "⬅️", "йе́ри"], ["ora", "час / сейчас", "⏰", "о́ра"]], "sents": [["Che giorno è oggi?", "Какой сегодня день?"], ["Oggi è venerdì", "Сегодня пятница"], ["Che ore sono?", "Который час?"], ["Domani è sabato", "Завтра суббота"]]}, {"id": 6, "m": 1, "name": "Тема 6. Люди, семья и артикли", "rule": "Род и число существительных + артикли:\n• Мужской род (ед.ч. -o → мн.ч. -i): il libro → i libri (книга → книги), il ragazzo → i ragazzi.\n• Женский род (ед.ч. -a → мн.ч. -e): la casa → le case (дом → дома), la ragazza → le ragazze.\n• Слова на -e бывают и м.р., и ж.р., во мн.ч. меняются на -i: il padre → i padri, la madre → le madri.", "words": [["uomo", "мужчина", "👨", "уо́мо"], ["donna", "женщина", "👩", "до́нна"], ["ragazzo", "парень / мальчик", "👦", "рага́ццо"], ["ragazza", "девушка / девочка", "👧", "рага́цца"], ["bambino", "ребёнок (мальчик)", "👶", "бамби́но"], ["madre", "мама / мать", "🤱", "ма́дре"], ["padre", "папа / отец", "🧔", "па́дре"], ["fratello", "брат", "👬", "фрате́лло"], ["sorella", "сестра", "👭", "соре́лла"], ["figlio", "сын", "👦", "фи́льо"], ["figlia", "дочь", "👧", "фи́лья"], ["amico", "друг", "🤜", "ами́ко"], ["amica", "подруга", "🤛", "ами́ка"]], "sents": [["Lui è mio fratello", "Он мой брат"], ["Lei è la mia amica", "Она моя подруга"], ["Ho due sorelle", "У меня две сестры"]]}, {"id": 7, "m": 1, "name": "Тема 7. Еда и напитки", "rule": "Вежливый заказ в Италии:\n• Вместо грубого «я хочу» (voglio) итальянцы почти всегда используют мягкую форму «Vorrei…» (я хотел бы) + «per favore» (пожалуйста).\n• Артикль перед гласной сокращается: l’acqua (вода), un’acqua (одна вода).\n• Кофе по умолчанию (un caffè) в Италии — это маленькая чашечка эспрессо.", "words": [["acqua", "вода", "💧", "а́ккуа"], ["caffè", "кофе", "☕", "каффэ́"], ["tè", "чай", "🫖", "тэ"], ["pane", "хлеб", "🍞", "па́не"], ["formaggio", "сыр", "🧀", "форма́джо"], ["vino", "вино", "🍷", "ви́но"], ["birra", "пиво", "🍺", "би́рра"], ["latte", "молоко", "🥛", "ла́тте"], ["mela", "яблоко", "🍎", "ме́ла"], ["Vorrei", "я хотел(а) бы", "🙋", "воррэ́й"], ["il conto", "счёт", "🧾", "иль ко́нто"]], "sents": [["Vorrei un caffè e un cornetto", "Я хотел бы кофе и круассан"], ["Vorrei un bicchiere di vino", "Я хотел бы бокал вина"], ["Il conto, per favore", "Счёт, пожалуйста"]]}, {"id": 8, "m": 1, "name": "Тема 8. Цвета, дом и предлоги места", "rule": "Согласование цветов и предлоги места:\n• Цвета на -o меняются по роду и числу: rosso / rossa / rossi / rosse (красный), nero / nera (чёрный), bianco / bianca (белый), giallo / gialla (жёлтый).\n• Цвета на -e меняются только по числу: verde / verdi (зелёный). Blu (синий) не меняется никогда!\n• Предлоги места: in (в), su (на), sotto (под), davanti a (перед), dietro (за/позади), vicino a (рядом с).", "words": [["rosso", "красный", "🔴", "ро́ссо"], ["blu", "синий", "🔵", "блу"], ["verde", "зелёный", "🟢", "ве́рде"], ["giallo", "жёлтый", "🟡", "джа́лло"], ["nero", "чёрный", "⚫", "не́ро"], ["bianco", "белый", "⚪", "бья́нко"], ["stanza", "комната", "🛋️", "ста́нца"], ["tavolo", "стол", "🪑", "та́воло"], ["sedia", "стул", "💺", "сэ́дья"], ["porta", "дверь", "🚪", "по́рта"], ["finestra", "окно", "🪟", "финэ́стра"], ["chiave", "ключ", "🔑", "кья́ве"], ["libro", "книга", "📖", "ли́бро"]], "sents": [["Il libro è sul tavolo", "Книга на столе"], ["La chiave è nella stanza", "Ключ в комнате"], ["La casa è bianca", "Дом белый"]]}, {"id": 9, "m": 2, "name": "Тема 9. Глаголы в настоящем времени", "rule": "Три спряжения правильных глаголов (Presente):\n1. На -ARE (parlare — говорить): parlo, parli, parla, parliamo, parlate, parlano.\n2. На -ERE (prendere — брать): prendo, prendi, prende, prendiamo, prendete, prendono.\n3. На -IRE (dormire — спать): dormo, dormi, dorme, dormiamo, dormite, dormono.\n*Часть глаголов на -ire (finire, capire) добавляет суффикс -isc-: finisco, finisci, finisce, finiamo, finite, finiscono.\nОтрицание: частица NON ставится строго перед глаголом.", "words": [["parlare", "говорить", "🗣️", "парла́ре"], ["mangiare", "есть / кушать", "🍽️", "манджа́ре"], ["lavorare", "работать", "💼", "лавора́ре"], ["abitare", "жить / проживать", "🏡", "абита́ре"], ["prendere", "брать / заказывать", "✊", "прэ́ндере"], ["credere", "верить / думать", "💭", "крэ́дере"], ["vendere", "продавать", "🏷️", "ве́ндере"], ["dormire", "спать", "😴", "дорми́ре"], ["aprire", "открывать", "🔓", "апри́ре"], ["finire", "заканчивать", "🏁", "фини́ре"]], "sents": [["Non parlo bene italiano", "Я плохо говорю по-итальянски"], ["Lavoro in centro", "Я работаю в центре"], ["Cosa prendi da bere?", "Что ты будешь пить?"], ["Finisco di lavorare alle sei", "Я заканчиваю работать в шесть"]]}, {"id": 10, "m": 2, "name": "Тема 10. Важные неправильные глаголы", "rule": "Самые частые неправильные глаголы (я / ты / он-она):\n• avere (иметь): ho, hai, ha (h не читается!)\n• fare (делать): faccio, fai, fa\n• andare (идти/ехать): vado, vai, va\n• venire (приходить): vengo, vieni, viene\n• volere (хотеть): voglio, vuoi, vuole\n• potere (мочь): posso, puoi, può\n• dovere (быть должным): devo, devi, deve\n• sapere (знать): so, sai, sa", "words": [["avere", "иметь", "🤲", "аве́ре"], ["fare", "делать", "🛠️", "фа́ре"], ["andare", "идти / ехать", "🚶", "анда́ре"], ["venire", "приходить", "🏃", "вени́ре"], ["volere", "хотеть", "✨", "воле́ре"], ["potere", "мочь", "💪", "поте́ре"], ["dovere", "быть должным", "📋", "дове́ре"], ["sapere", "знать", "🧠", "сапе́ре"]], "sents": [["Vado a casa adesso", "Я иду домой сейчас"], ["Posso entrare?", "Можно войти?"], ["Devo lavorare domani", "Я должен работать завтра"], ["Non lo so", "Я этого не знаю"]]}, {"id": 11, "m": 2, "name": "Тема 11. Мой день и распорядок", "rule": "Возвратные глаголы и наречия частоты:\n• Возвратные глаголы (на -si) требуют частицы mi, ti, si перед глаголом: svegliarsi (просыпаться) → io mi sveglio (я просыпаюсь), tu ti svegli (ты просыпаешься).\n• Наречия частоты обычно ставятся сразу после глагола: Lavoro sempre — Я всегда работаю; Non mangio mai — Я никогда не ем (двойное отрицание в итальянском обязательно!).", "words": [["mi sveglio", "я просыпаюсь", "⏰", "ми зве́льо"], ["faccio colazione", "я завтракаю", "🥐", "фа́ччо колацио́не"], ["studio", "я учусь / изучаю", "📚", "сту́дио"], ["torno a casa", "я возвращаюсь домой", "🏠", "то́рно а ка́за"], ["guardo", "я смотрю", "👀", "гуа́рдо"], ["sempre", "всегда", "♾️", "сэ́мпрэ"], ["spesso", "часто", "🔄", "спэ́ссо"], ["a volte", "иногда", "⚖️", "а во́льте"], ["mai", "никогда", "🚫", "ма́й"]], "sents": [["Mi sveglio sempre alle sette", "Я всегда просыпаюсь в семь"], ["Studio italiano ogni giorno", "Я учу итальянский каждый день"], ["La sera guardo un film", "Вечером я смотрю фильм"], ["Non bevo mai caffè la sera", "Я никогда не пью кофе вечером"]]}, {"id": 12, "m": 2, "name": "Тема 12. Люблю, не люблю и хобби", "rule": "Конструкция MI PIACE / MI PIACCIONO:\nВ итальянском говорят не «я люблю пиццу», а «пицца нравится мне»:\n• Mi piace + ед. число или глагол: Mi piace la pizza (Мне нравится пицца), Mi piace viaggiare (Мне нравится путешествовать).\n• Mi piacciono + мн. число: Mi piacciono i libri (Мне нравятся книги).\n• Чтобы сказать «тебе нравится», замените mi на ti: Ti piace?", "words": [["Mi piace", "мне нравится (ед.ч.)", "👍", "ми пья́че"], ["Mi piacciono", "мне нравятся (мн.ч.)", "😍", "ми пья́ччоно"], ["amo", "я люблю", "❤️", "а́мо"], ["odio", "я ненавижу", "💢", "о́дио"], ["preferisco", "я предпочитаю", "⭐", "префери́ско"], ["leggere", "читать", "📖", "ле́дджере"], ["viaggiare", "путешествовать", "✈️", "вьядджа́ре"], ["cucinare", "готовить", "👨‍🍳", "кучина́ре"], ["ascoltare musica", "слушать музыку", "🎧", "аскольта́ре му́зика"]], "sents": [["Mi piace viaggiare e leggere libri", "Мне нравится путешествовать и читать книги"], ["Mi piacciono gli spaghetti", "Мне нравятся спагетти"], ["Preferisco il tè al caffè", "Я предпочитаю чай кофе"]]}, {"id": 13, "m": 2, "name": "Тема 13. Покупки и деньги", "rule": "В магазине (In negozio):\n• Указательные местоимения: questo / questa (этот / эта — рядом со мной), quello / quella (тот / та — далеко).\n• Оплата: pagare in contanti (платить наличными) или pagare con la carta (платить картой).\n• В итальянских супермаркетах пакеты на кассе платные — кассир часто спрашивает: Vuole un sacchetto? (Вам нужен пакет?).", "words": [["negozio", "магазин", "🛍️", "него́цио"], ["supermercato", "супермаркет", "🛒", "супермерка́то"], ["farmacia", "аптека", "💊", "фармачи́а"], ["Prendo questo", "я возьму это", "☝️", "прэ́ндо куэ́сто"], ["troppo caro", "слишком дорого", "💸", "тро́ппо ка́ро"], ["carta", "карта (банковская)", "💳", "ка́рта"], ["contanti", "наличные", "💵", "конта́нти"], ["sacchetto", "пакет", "🛍️", "сакке́тто"], ["taglia", "размер (одежды)", "📏", "та́лья"]], "sents": [["È troppo caro per me", "Это слишком дорого для меня"], ["Posso pagare con la carta?", "Можно оплатить картой?"], ["Vorrei un sacchetto, per favore", "Мне нужен пакет, пожалуйста"]]}, {"id": 14, "m": 2, "name": "Тема 14. Кафе и ресторан", "rule": "Полезные фразы в ресторане:\n• Coperto — плата за обслуживание и хлеб на столе в итальянских ресторанах (обычно 1.5–3 € с человека, указывается в меню).\n• Вода: acqua naturale (без газа) и acqua frizzante (с газом).\n• Согласование по роду: Sono vegetariano (говорит мужчина) / Sono vegetariana (говорит женщина).", "words": [["tavolo per due", "столик на двоих", "🍽️", "та́воло пер ду́э"], ["il menù", "меню", "📜", "иль мену́"], ["consiglia", "советует (вы советуете)", "👨‍🍳", "конси́лья"], ["vegetariano", "вегетарианец", "🥗", "веджетариа́но"], ["senza glutine", "без глютена", "🌾", "сэ́нца глу́тине"], ["acqua naturale", "вода без газа", "💧", "а́ккуа натура́ле"], ["acqua frizzante", "вода с газом", "🫧", "а́ккуа фрицца́нте"], ["dolce", "десерт / сладкий", "🍰", "до́льче"]], "sents": [["Un tavolo per due, per favore", "Столик на двоих, пожалуйста"], ["Che cosa mi consiglia?", "Что вы мне посоветуете?"], ["Una bottiglia d’acqua naturale", "Бутылку негазированной воды"]]}, {"id": 15, "m": 2, "name": "Тема 15. Город и направления", "rule": "Как спросить дорогу:\n• Dove + è сливается в Dov’è…? (Где находится…?). Например: Dov’è la stazione?\n• Направления: girare a destra (повернуть направо), girare a sinistra (повернуть налево), andare sempre dritto (идти всё время прямо).\n• Предлог a сливается с артиклем: a + il = al (al centro), a + la = alla (alla fermata).", "words": [["Dov’è…?", "где находится…?", "📍", "дов’э́"], ["stazione", "вокзал", "🚉", "стацио́не"], ["aeroporto", "аэропорт", "✈️", "аэропо́рто"], ["fermata", "остановка", "🚏", "ферма́та"], ["centro", "центр", "🏛️", "че́нтро"], ["a destra", "направо", "➡️", "а дэ́стра"], ["a sinistra", "налево", "⬅️", "а сини́стра"], ["sempre dritto", "всё время прямо", "⬆️", "сэ́мпрэ дри́тто"], ["vicino", "близко", "🤏", "вичи́но"], ["lontano", "далеко", "🔭", "лонта́но"]], "sents": [["Scusi, dov’è la stazione?", "Извините, где находится вокзал?"], ["Vada sempre dritto e poi a destra", "Идите всё время прямо, а потом направо"], ["Il centro è vicino", "Центр близко"]]}, {"id": 16, "m": 2, "name": "Тема 16. Транспорт и путешествия", "rule": "Билеты и транспорт:\n• Важно: бумажный билет на автобус, метро или региональный поезд в Италии нужно обязательно прокомпостировать (convalidare) в жёлтом или зелёном валидаторе перед посадкой, иначе штраф!\n• Предлог «до / в» с городами — A: un biglietto per Roma (билет до Рима), vado a Milano (еду в Милан).", "words": [["biglietto", "билет", "🎫", "билье́тто"], ["treno", "поезд", "🚆", "трэ́но"], ["autobus", "автобус", "🚌", "а́утобус"], ["metro", "метро", "🚇", "мэ́тро"], ["aereo", "самолёт", "🛫", "аэ́рео"], ["taxi", "такси", "🚕", "та́кси"], ["parte", "отправляется / уезжает", "⏱️", "па́рте"], ["binario", "платформа / путь", "🛤️", "бина́рио"], ["cambiare", "менять / делать пересадку", "🔁", "камбья́ре"]], "sents": [["A che ora parte il treno?", "Во сколько отправляется поезд?"], ["Un biglietto per Roma, per favore", "Один билет до Рима, пожалуйста"], ["Devo cambiare treno?", "Мне нужно сделать пересадку?"]]}, {"id": 17, "m": 3, "name": "Тема 17. Прошедшее время (Passato prossimo)", "rule": "Как строить прошедшее время (Passato prossimo):\nНужен вспомогательный глагол (avere или essere) + причастие (-ato, -uto, -ito):\n1. С AVERE (большинство действий: mangiare, lavorare, comprare) — окончание не меняется:\n• Ho mangiato (я поел/поела), abbiamo lavorato (мы поработали).\n2. С ESSERE (движение и состояние: andare, venire, arrivare, stare) — окончание согласуется с родом и числом!\n• Sono andato (я пошёл — м.р.) / Sono andata (я пошла — ж.р.).\n• Siamo andati (мы пошли).", "words": [["ho mangiato", "я поел(а)", "🍽️", "о манджа́то"], ["ho fatto", "я сделал(а)", "✅", "о фа́тто"], ["ho visto", "я видел(а)", "👁️", "о ви́сто"], ["ho comprato", "я купил(а)", "🛍️", "о компра́то"], ["ho lavorato", "я поработал(а)", "💼", "о лавора́то"], ["sono andato", "я пошёл (м.р.)", "🚶‍♂️", "со́но анда́то"], ["sono andata", "я пошла (ж.р.)", "🚶‍♀️", "со́но анда́та"], ["sono arrivato", "я приехал / прибыл", "🏁", "со́но аррива́то"], ["sono stato", "я был / побывал", "📍", "со́но ста́то"]], "sents": [["Ieri ho lavorato molto", "Вчера я много работал"], ["Poi sono andato al cinema", "Потом я пошёл в кино"], ["Abbiamo comprato un biglietto", "Мы купили билет"]]}, {"id": 18, "m": 3, "name": "Тема 18. Будущее время и планы", "rule": "Как говорить о будущем без сложных форм:\nВ разговорном итальянском для ближайших планов чаще всего используют обычное настоящее время + слово-маркер будущего (domani, stasera, la settimana prossima):\n• Domani vado a Roma — Завтра я еду в Рим.\nДля желаний и намерений используют:\n• Vorrei + инфинитив (я хотел бы…)\n• Ho intenzione di + инфинитив (я намерен…)", "words": [["stasera", "сегодня вечером", "🌃", "стасэ́ра"], ["settimana prossima", "на следующей неделе", "🗓️", "сеттима́на про́ссима"], ["visitare", "посетить / осмотреть", "🏛️", "визита́ре"], ["ho intenzione di", "я намерен(а)", "🎯", "о интенцио́не ди"], ["fine settimana", "выходные", "🏖️", "фи́не сеттима́на"], ["vacanza", "отпуск / каникулы", "🧳", "вака́нца"], ["presto", "скоро / рано", "⏩", "прэ́сто"], ["più tardi", "позже", "⏳", "пью та́рди"]], "sents": [["Domani vado a Roma", "Завтра я еду в Рим"], ["Stasera vedo un film con gli amici", "Сегодня вечером я смотрю фильм с друзьями"], ["Vorrei visitare Firenze", "Я хотел бы посетить Флоренцию"]]}, {"id": 19, "m": 3, "name": "Тема 19. Погода и времена года", "rule": "Говорим о погоде:\nДля описания погоды в итальянском используется глагол FARE (делать):\n• Che tempo fa? — Какая погода?\n• Fa caldo — Жарко (дословно «делает тепло»).\n• Fa freddo — Холодно.\n• Fa bel tempo — Хорошая погода.\nДождь и снег выражаются одним словом: Piove (идёт дождь), Nevica (идёт снег).", "words": [["Che tempo fa?", "какая погода?", "🌤️", "ке тэ́мпо фа"], ["fa caldo", "жарко", "🥵", "фа ка́льдо"], ["fa freddo", "холодно", "🥶", "фа фрэ́ддо"], ["piove", "идёт дождь", "🌧️", "пьо́ве"], ["nevica", "идёт снег", "❄️", "не́вика"], ["nuvoloso", "облачно", "☁️", "нуволо́зо"], ["sole", "солнце", "☀️", "со́ле"], ["vento", "ветер", "💨", "ве́нто"], ["primavera", "весна", "🌸", "примавэ́ра"], ["estate", "лето", "🏖️", "эста́те"], ["autunno", "осень", "🍂", "ауту́нно"], ["inverno", "зима", "⛄", "инвэ́рно"]], "sents": [["Oggi c’è il sole e fa caldo", "Сегодня солнечно и жарко"], ["In inverno fa freddo e nevica", "Зимой холодно и идёт снег"], ["Prendi l’ombrello, piove!", "Возьми зонт, идёт дождь!"]]}, {"id": 20, "m": 3, "name": "Тема 20. Здоровье и экстренные ситуации", "rule": "Если что-то болит:\n• Mi fa male + ед. число: Mi fa male la testa (У меня болит голова).\n• Mi fanno male + мн. число: Mi fanno male i denti (У меня болят зубы).\n• Единый номер экстренных служб в Италии и ЕС — 112.", "words": [["Mi fa male…", "у меня болит…", "🤕", "ми фа ма́ле"], ["testa", "голова", "🤯", "тэ́ста"], ["malato", "больной / болен", "🤒", "мала́то"], ["medico", "врач", "🩺", "мэ́дико"], ["ospedale", "больница", "🏥", "оспеда́ле"], ["ambulanza", "скорая помощь", "🚑", "амбула́нца"], ["passaporto", "паспорт", "🛂", "пассапо́рто"], ["Aiuto!", "помогите!", "🆘", "айу́то"], ["ho perso", "я потерял(а)", "😰", "о пэ́рсо"]], "sents": [["Mi fa male la testa", "У меня болит голова"], ["Ho bisogno di un medico", "Мне нужен врач"], ["Ho perso il passaporto", "Я потерял паспорт"], ["Dov’è l’ospedale più vicino?", "Где ближайшая больница?"]]}, {"id": 21, "m": 3, "name": "Тема 21. Работа, учёба и профессии", "rule": "Как рассказать о работе:\n• Lavoro come + профессия (без артикля!): Lavoro come ingegnere — Я работаю инженером.\n• Профессии на -e (insegnante, ingegnere) одинаковы для мужчин и женщин, меняется только артикль (un insegnante / un’insegnante).\n• Профессии на -o меняются на -a: cuoco → cuoca, medico → medichessa (но чаще говорят il medico / la dottoressa).", "words": [["lavoro come", "я работаю (кем-то)", "💼", "лаво́ро ко́ме"], ["università", "университет", "🎓", "университа́"], ["interessante", "интересный", "💡", "интересса́нте"], ["riunione", "встреча / совещание", "🤝", "риуньо́не"], ["insegnante", "учитель / преподаватель", "👩‍🏫", "инсенья́нте"], ["ingegnere", "инженер", "👷", "индженье́ре"], ["programmatore", "программист", "💻", "программато́ре"], ["cuoco", "повар", "👨‍🍳", "куо́ко"], ["ufficio", "офис", "🏢", "уффи́чо"]], "sents": [["Lavoro come ingegnere", "Я работаю инженером"], ["Studio all’università", "Я учусь в университете"], ["Oggi ho una riunione importante", "Сегодня у меня важная встреча"], ["Devo mandare un’email", "Мне нужно отправить письмо"]]}, {"id": 22, "m": 3, "name": "Тема 22. Мнения и связки в речи", "rule": "Как связывать мысли как носитель:\n• Вместо однообразного «и… и…» используйте: ma / però (но), quindi (поэтому / следовательно), anche (также / тоже).\n• Слово Perché означает и «почему?» в вопросе, и «потому что» в ответе!\n• Secondo me (по-моему) не требует сложного наклонения Congiuntivo — после него можно говорить обычным настоящим временем.", "words": [["Secondo me", "по-моему", "🗣️", "секо́ндо мэ"], ["Penso che", "я думаю, что", "💭", "пэ́нсо ке"], ["Sono d’accordo", "я согласен / согласна", "🤝", "со́но д’акко́рдо"], ["Perché", "почему / потому что", "❓", "перке́"], ["ma", "но", "⚡", "ма"], ["però", "однако / но", "🔄", "перо́"], ["quindi", "поэтому / итак", "➡️", "куи́нди"], ["anche", "также / тоже", "➕", "а́нке"]], "sents": [["Secondo me è una buona idea", "По-моему, это хорошая идея"], ["Non sono d’accordo con te", "Я не согласен с тобой"], ["Studio italiano perché mi piace", "Я учу итальянский, потому что он мне нравится"]]}, {"id": 23, "m": 3, "name": "Тема 23. Вежливость и спасение в диалоге", "rule": "Обращение на «Вы» (Lei):\n• В итальянском вежливое «Вы» — это местоимение третьего лица единственного числа Lei (пишется с большой буквы), поэтому глагол ставится в форму «он/она»!\n• Сравните: Come ti chiami? (Как тебя зовут?) → Come si chiama? (Как Вас зовут?).\n• Parla inglese? — Вы говорите по-английски?", "words": [["Lei", "Вы (вежливо)", "🎩", "лэ́й"], ["Come si chiama?", "как Вас зовут?", "🪪", "ко́ме си кья́ма"], ["Può ripetere?", "можете повторить?", "🔁", "пуо́ рипэ́тере"], ["più lentamente", "медленнее", "🐢", "пью лентаме́нте"], ["Non ho capito", "я не понял(а)", "🤔", "нон о капи́то"], ["Può aiutarmi?", "можете мне помочь?", "🆘", "пуо́ айута́рми"], ["certamente", "конечно / безусловно", "👌", "чертаме́нте"]], "sents": [["Mi scusi, può ripetere per favore?", "Извините, можете повторить, пожалуйста?"], ["Parli più lentamente, per favore", "Говорите медленнее, пожалуйста"], ["Non ho capito bene", "Я не совсем понял"]]}, {"id": 24, "m": 3, "name": "Тема 24. Итоговая практика и разговор", "rule": "Шпаргалка для свободного диалога:\n1. Представиться: Ciao, mi chiamo…, sono di…, abito a…\n2. Сказать, чем занимаешься: Lavoro come… / Studio…\n3. Рассказать о прошлом: Ieri / Nel fine settimana ho… / sono andato a…\n4. Поделиться планами: Domani / La settimana prossima vado a… / vorrei…\n5. Если потерялся в разговоре: Scusi, non ho capito, può ripetere?", "words": [["raccontare", "рассказывать", "📖", "ракконта́ре"], ["dialogo", "диалог", "💬", "дья́лого"], ["esperienza", "опыт / впечатление", "🌟", "эспериэ́нца"], ["progetto", "проект / план", "📐", "продже́тто"], ["viaggio", "путешествие / поездка", "🧳", "вья́джо"], ["insieme", "вместе", "👫", "инсье́ме"], ["perfetto", "отлично / идеально", "💯", "перфэ́тто"], ["complimenti", "поздравляю / браво", "🎉", "комплиме́нти"]], "sents": [["Ciao! Mi chiamo Giorgio e sono di San Pietroburgo", "Привет! Меня зовут Георгий, и я из Санкт-Петербурга"], ["Lavoro come ingegnere e studio italiano", "Я работаю инженером и учу итальянский"], ["Nel fine settimana sono andato al ristorante con gli amici", "На выходных я ходил в ресторан с друзьями"], ["Il mese prossimo vorrei viaggiare in Italia", "В следующем месяце я хотел бы поехать в Италию"]]}];
 
+function buildDefaultState(){
+  return {
+    xp: 0,
+    streak: 1,
+    lastDay: new Date().toDateString(),
+    completed: {},
+    lessons: RAW_LESSONS.map(function(l){
+      return {
+        id: l.id,
+        m: l.m,
+        name: l.name,
+        rule: l.rule,
+        words: l.words.map(function(w){
+          return {it:w[0], ru:w[1], em:w[2]||"", tr:w[3]||"", lv:0, due:0};
+        }),
+        sents: (l.sents||[]).map(function(s){
+          return {it:s[0], ru:s[1]};
+        })
+      };
+    })
+  };
+}
+
+var D=buildDefaultState();
 var tg=window.Telegram&&Telegram.WebApp;
 var CS=tg&&tg.CloudStorage&&tg.initData?tg.CloudStorage:null;
-var BOT_LINK=""; /* например: https://t.me/mybot/cards */
+var BOT_LINK="";
 
 function toast(msg){
   var el=document.getElementById("toast");
@@ -178,15 +238,41 @@ function toast(msg){
   toast._t=setTimeout(function(){el.classList.remove("show")},2200);
 }
 
+function addXP(pts, reason){
+  D.xp=(D.xp||0)+pts;
+  var today=new Date().toDateString();
+  if(D.lastDay!==today){
+    var yest=new Date(Date.now()-DAY).toDateString();
+    D.streak=(D.lastDay===yest)?(D.streak||1)+1:1;
+    D.lastDay=today;
+  }
+  save();
+  if(reason)toast("+"+pts+" XP · "+reason);
+}
+
+function getRank(xp){
+  if(xp>=1500)return "Maestro 🇮🇹";
+  if(xp>=800)return "Viaggiatore ✈️";
+  if(xp>=350)return "Studente 📚";
+  if(xp>=100)return "Principiante 🌱";
+  return "Novizio ☕";
+}
+
 function normalizeData(p){
   if(!p||!Array.isArray(p.lessons))return null;
+  if(typeof p.xp!=="number")p.xp=0;
+  if(typeof p.streak!=="number")p.streak=1;
+  if(!p.completed)p.completed={};
   p.lessons.forEach(function(l){
+    if(!l.m)l.m=1;
+    if(!l.rule)l.rule="";
     if(!Array.isArray(l.words))l.words=[];
     if(!Array.isArray(l.sents))l.sents=[];
     l.words.forEach(function(w){
       if(typeof w.lv!=="number")w.lv=0;
       if(typeof w.due!=="number")w.due=0;
       if(!w.em)w.em="";
+      if(!w.tr)w.tr="";
     });
   });
   return p;
@@ -194,7 +280,7 @@ function normalizeData(p){
 
 function fromLocal(){
   try{
-    var s=localStorage.getItem(KEY)||localStorage.getItem("ital-cards-v1");
+    var s=localStorage.getItem(KEY);
     if(s){var p=normalizeData(JSON.parse(s));if(p)D=p;}
   }catch(e){}
 }
@@ -245,15 +331,15 @@ function esc(t){
   });
 }
 
-var view="home",cur=null,mode="mix",S=null,editIdx=-1,app=document.getElementById("app");
+var view="home",cur=null,monthTab=1,mode="mix",S=null,editIdx=-1,app=document.getElementById("app");
 function L(){return D.lessons.find(function(l){return l.id===cur})}
-function go(v,id){view=v;editIdx=-1;if(id!==undefined)cur=id;render()}
+function go(v,id){view=v;editIdx=-1;if(id!==undefined)cur=id;render();window.scrollTo(0,0)}
 
-function say(t){
+function say(t, slow){
   try{
     var u=new SpeechSynthesisUtterance(String(t));
     u.lang="it-IT";
-    u.rate=0.88;
+    u.rate=slow?0.62:0.88;
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
   }catch(e){}
@@ -268,7 +354,7 @@ function shuffle(a){
   return a;
 }
 
-/* Интервальное повторение (SRS) */
+/* SRS */
 function markSRS(w,ok){
   var now=Date.now();
   if(ok){
@@ -288,7 +374,7 @@ function addLesson(){
   var n=document.getElementById("ln").value.trim();
   if(!n)return;
   var id=Date.now();
-  D.lessons.push({id:id,name:n,words:[],sents:[]});
+  D.lessons.push({id:id,m:monthTab,name:n,rule:"Пользовательский урок",words:[],sents:[]});
   save();
   go("lesson",id);
 }
@@ -304,13 +390,12 @@ function delLesson(){
 function addWord(){
   var a=document.getElementById("wi").value.trim();
   var b=document.getElementById("wr").value.trim();
+  var tr=document.getElementById("wt").value.trim();
   if(!a||!b)return;
-  L().words.push({it:a,ru:b,em:document.getElementById("we").value.trim(),lv:0,due:0});
+  L().words.push({it:a,ru:b,em:document.getElementById("we").value.trim(),tr:tr,lv:0,due:0});
   save();
   render();
   toast("Слово добавлено");
-  var el=document.getElementById("wi");
-  if(el)el.focus();
 }
 
 function startEditWord(i){editIdx=i;render()}
@@ -318,10 +403,11 @@ function cancelEditWord(){editIdx=-1;render()}
 function saveEditWord(i){
   var a=document.getElementById("ewi").value.trim();
   var b=document.getElementById("ewr").value.trim();
+  var tr=document.getElementById("ewt").value.trim();
   var e=document.getElementById("ewe").value.trim();
   if(!a||!b)return;
   var w=L().words[i];
-  w.it=a;w.ru=b;w.em=e;
+  w.it=a;w.ru=b;w.tr=tr;w.em=e;
   editIdx=-1;
   save();
   render();
@@ -334,7 +420,7 @@ function addBulk(){
     var m=r.split(/\s*[-–—=;:\t]\s*/),em="";
     if(m.length>=3&&/^[^\p{L}\p{N}]+$/u.test(m[m.length-1].trim()))em=m.pop().trim();
     if(m.length>=2&&m[0].trim()&&m[1].trim()){
-      L().words.push({it:m[0].trim(),ru:m.slice(1).join(" - ").trim(),em:em,lv:0,due:0});
+      L().words.push({it:m[0].trim(),ru:m.slice(1).join(" - ").trim(),em:em,tr:"",lv:0,due:0});
       n++;
     }
   });
@@ -345,12 +431,14 @@ function addBulk(){
 function delWord(i){L().words.splice(i,1);if(editIdx===i)editIdx=-1;save();render()}
 function setMode(m){mode=m;render()}
 
+/* Карточки */
 function start(customList,title){
   var w=customList||L().words;
   if(!w.length)return;
   S={
     title:title||L().name,
     isGlobal:!!customList,
+    lessonId:customList?null:L().id,
     q:shuffle(w).map(function(x){
       return{w:x,side:mode==="mix"?(Math.random()<.5?"it":"ru"):mode,firstTry:true};
     }),
@@ -360,20 +448,26 @@ function start(customList,title){
   };
   view="study";
   render();
+  if(S.q[0].side==="it")say(S.q[0].w.it);
 }
 
 function startReview(){
   var due=dueWords();
   if(!due.length){toast("На сегодня всё повторено!");return}
-  start(due,"Повторение на сегодня");
+  start(due.slice(0,25),"Повторение на сегодня");
 }
 
-function flip(){S.flip=true;render()}
+function flip(){
+  S.flip=true;
+  render();
+  say(S.q[0].w.it);
+}
+
 function answer(ok){
   var c=S.q.shift();
   if(c.firstTry){
     markSRS(c.w,ok);
-    save();
+    if(ok)addXP(5);
   }
   if(ok){
     S.known++;
@@ -382,112 +476,89 @@ function answer(ok){
     S.q.push(c);
   }
   S.flip=false;
+  if(!S.q.length){
+    if(S.lessonId)D.completed[S.lessonId]=(D.completed[S.lessonId]||0)+1;
+    addXP(25,"Урок пройден!");
+  }else{
+    save();
+  }
   render();
+  if(S.q.length&&S.q[0].side==="it")say(S.q[0].w.it);
 }
 
-function copyText(t,msg){
-  try{
-    navigator.clipboard.writeText(t).then(function(){toast(msg)},function(){prompt("Скопируйте вручную:",t)});
-  }catch(e){prompt("Скопируйте вручную:",t)}
-}
-
-function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
-function dec(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return JSON.parse(decodeURIComponent(escape(atob(s))))}
-
-function shareLesson(){
-  var l=L();
-  var cleanWords=l.words.map(function(w){return{it:w.it,ru:w.ru,em:w.em||""}});
-  var p=enc({name:l.name,words:cleanWords,sents:l.sents||[]});
-  if(BOT_LINK&&p.length<=500)copyText(BOT_LINK+"?startapp="+p,"Ссылка скопирована!");
-  else copyText(p,"Код урока скопирован!");
-}
-
-function exportAll(){
-  var t=document.getElementById("bkp");
-  t.value=enc(D);
-  t.select();
-  copyText(t.value,"Резервная копия скопирована");
-}
-
-function mergeIn(o){
-  var ls=o.lessons||[{name:o.name,words:o.words,sents:o.sents||[]}],n=0;
-  ls.forEach(function(l){
-    if(l&&l.name&&Array.isArray(l.words)){
-      D.lessons.push({
-        id:Date.now()+n,
-        name:String(l.name),
-        words:l.words.filter(function(w){return w&&w.it&&w.ru}).map(function(w){
-          return{it:String(w.it),ru:String(w.ru),em:w.em?String(w.em):"",lv:w.lv||0,due:w.due||0};
-        }),
-        sents:(l.sents||[]).filter(function(x){return x&&x.it&&x.ru}).map(function(x){
-          return{it:String(x.it),ru:String(x.ru)};
-        })
-      });
-      n++;
-    }
-  });
-  save();
-  return n;
-}
-
-function importAll(){
-  var v=document.getElementById("bkp").value.trim().replace(/^.*#l=/,"");
-  try{
-    var n=mergeIn(dec(v));
-    toast("Добавлено уроков: "+n);
-    render();
-  }catch(e){alert("Не удалось прочитать код. Вставьте его целиком.")}
-}
-
-function checkHash(){
-  var m=location.hash.match(/^#l=(.+)$/);
-  var sp=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param;
-  var c=m?m[1]:sp;
-  if(!c)return;
-  try{
-    var o=dec(c);
-    if(confirm("Добавить урок «"+o.name+"» ("+o.words.length+" сл.)?")){
-      mergeIn(o);
-      view="home";
-      render();
-    }
-  }catch(e){}
-  history.replaceState(null,"",location.pathname+location.search);
-}
-
-try{navigator.storage.persist()}catch(e){}
-
+/* Игры: quiz (тест), pics (картинки), sent (предложения), dict (диктант!) */
 var hard=false,P=null,gback="home";
+
 var GL={
-  io:"я",tu:"ты",lui:"он",lei:"она (или вежливое «вы»)",noi:"мы",voi:"вы",loro:"они",
-  sono:"я есть / они есть (essere)",sei:"ты есть (essere); также число 6",è:"он/она есть (essere)",siamo:"мы есть",
-  ho:"у меня есть (avere); h не читается",hai:"у тебя есть",ha:"у него/неё есть",hanno:"у них есть",
-  vorrei:"я бы хотел(а) — вежливая форма (volere)",mille:"тысяча (grazie mille — большое спасибо)",
-  molto:"очень / много",buona:"вкусная / хорошая (ж.р. от buono)",rossa:"красная (ж.р. от rosso)",
-  il:"артикль м.р. перед согласной",lo:"артикль м.р. перед s+согласной, z",la:"артикль ж.р.",
-  l:"артикль перед гласной (l’acqua)",i:"артикль мн.ч. м.р.",gli:"артикль мн.ч. м.р. перед гласной",le:"артикль мн.ч. ж.р.",
-  un:"неопределённый артикль м.р. («один»)",una:"неопределённый артикль ж.р.",
-  non:"«не», ставится перед глаголом",e:"«и»",di:"«из, о, чей»",con:"«с»",per:"«для, ради»",
-  che:"«что, который»",come:"«как»",dove:"«где»",beve:"он/она пьёт (bere)",
-  stai:"ты себя чувствуешь (stare): Come stai? — Как дела?",signora:"синьора, госпожа",
-  gatti:"коты (мн.ч. от gatto)",favore:"одолжение (per favore — пожалуйста)"
+  io:"я",tu:"ты",lui:"он",lei:"она / вежливо «Вы»",noi:"мы",voi:"вы",loro:"они",
+  sono:"я есть / они есть (essere)",sei:"ты есть (essere)",è:"он/она есть (essere)",siamo:"мы есть",siete:"вы есть",
+  ho:"у меня есть (avere)",hai:"у тебя есть",ha:"у него/неё есть",abbiamo:"у нас есть",hanno:"у них есть",
+  vorrei:"я хотел(а) бы (volere)",mille:"тысяча",molto:"очень / много",
+  buona:"вкусная / хорошая (ж.р.)",rossa:"красная (ж.р.)",bianca:"белая (ж.р.)",
+  il:"артикль м.р.",lo:"артикль м.р. перед s+согл, z",la:"артикль ж.р.",l:"артикль перед гласной",
+  i:"артикль мн.ч. м.р.",gli:"артикль мн.ч. м.р. перед гласной",le:"артикль мн.ч. ж.р.",
+  un:"артикль м.р. (один)",una:"артикль ж.р. (одна)",
+  non:"не (ставится перед глаголом)",e:"и",di:"из / о",con:"с",per:"для / в (направление)",
+  che:"что / какой",come:"как",dove:"где",dovè:"где находится",
+  stai:"ты (как дела)",sta:"вы (как дела)",signora:"синьора",
+  gatti:"коты (мн.ч.)",favore:"одолжение (per favore — пожалуйста)",
+  sempre:"всегда",mai:"никогда",ieri:"вчера",oggi:"сегодня",domani:"завтра",stasera:"сегодня вечером"
 };
 
 var GR=[
-  ["Произношение","c перед e, i читается как «ч»: ciao — «чао». c перед a, o, u — «к»: casa.\ng перед e, i — «дж»: gelato. ch и gh дают «к» и «г»: che, spaghetti.\nsc перед e, i — «ш»: pesce. gli — как мягкое «ль»: figlio. gn — «нь»: gnocchi.\nДвойные согласные тянутся дольше: pala и palla. Ударение чаще на предпоследнем слоге."],
-  ["Род и число существительных","Слова на -o обычно мужского рода (gatto), на -a женского (casa), на -e бывают оба (pane — м., notte — ж.).\nМножественное число: -o → -i (gatto → gatti), -a → -e (casa → case), -e → -i (pane → pani)."],
-  ["Артикли","Определённый: il (il gatto), lo перед s+согласная и z (lo zaino), l’ перед гласной (l’acqua), la (la casa). Во мн.ч.: i, gli, le.\nНеопределённый: un (un gatto), uno (uno zaino), una (una casa), un’ перед гласной у ж.р. (un’amica)."],
-  ["Глагол essere (быть)","io sono, tu sei, lui/lei è, noi siamo, voi siete, loro sono.\nIo sono Marco — Я Марко. Отрицание: non перед глаголом — Non sono Marco."],
-  ["Глагол avere (иметь)","io ho, tu hai, lui/lei ha, noi abbiamo, voi avete, loro hanno. Буква h не читается.\n«У меня есть кот» — Ho un gatto. «У меня нет воды» — Non ho acqua."],
-  ["Вопросы","Порядок слов не меняется, меняется интонация: Hai un gatto? — У тебя есть кот?\nCome — как, dove — где, che cosa — что, quando — когда, perché — почему/потому что, chi — кто.\nCome stai? — Как дела? (на «ты»), Come sta? (на «вы»)."],
-  ["«Ты» и «вы»","tu — на «ты», Lei — вежливое «вы»: Come sta, signora?\nscusa — извини (на «ты»), scusi — извините (на «вы»).\nBuongiorno — до вечера, buonasera — вечером, ciao — привет и пока (с близкими)."]
+  ["1. Правила чтения и ударения","• C + e, i = «ч» (ciao, cena), иначе «к» (casa, come).
+• CH + e, i = «к» (che, perché, spaghetti).
+• G + e, i = «дж» (gelato, giorno), иначе «г» (gatto).
+• GH + e, i = «г» (funghi).
+• SC + e, i = «ш» (pesce, uscire).
+• GLI = мягкое «ль» (famiglia, figlio).
+• GN = «нь» (gnocchi, bagno).
+• Двойные согласные читаются длинно и чётко (mamma, pizza, anno).
+• Ударение в 80% слов падает на предпоследний слог. Если на последний — ставится знак ударения (caffè, città, lunedì)."],
+  ["2. Артикли (определённый и неопределённый)","Определённый артикль (конкретный предмет):
+• м.р. ед.ч.: il (il libro), lo (перед z, s+согл.: lo zaino, lo studente), l’ (перед гласной: l’uomo).
+• м.р. мн.ч.: i (i libri), gli (gli uomini, gli studenti).
+• ж.р. ед.ч.: la (la casa), l’ (перед гласной: l’acqua).
+• ж.р. мн.ч.: le (le case, le acque).
+
+Неопределённый артикль (один из многих):
+• м.р.: un (un libro, un uomo), uno (uno zaino).
+• ж.р.: una (una casa), un’ (перед гласной: un’amica)."],
+  ["3. Род и множественное число","• Слова на -o → м.р., во мн.ч. -i (ragazzo → ragazzi).
+• Слова на -a → ж.р., во мн.ч. -e (ragazza → ragazze).
+• Слова на -e → бывают м.р. и ж.р., во мн.ч. всегда -i (padre → padri, madre → madri).
+• Слова с ударением на конце не меняются во мн.ч. (un caffè → due caffè, la città → le città)."],
+  ["4. Правописание и апострофы","• Не путайте è (он/она есть — с ударением) и e (союз «и» — без ударения).
+• Не путайте sì (да — с ударением) и si (возвратная частица — без ударения).
+• Слияние предлогов с артиклями:
+  a + il = al, a + la = alla, a + l’ = all’
+  in + il = nel, in + la = nella
+  su + il = sul, su + la = sulla
+  di + il = del, di + la = della"],
+  ["5. Глаголы essere и avere","ESSERE (быть, являться):
+io sono, tu sei, lui/lei è, noi siamo, voi siete, loro sono.
+
+AVERE (иметь, владеть — буква H не читается!):
+io ho, tu hai, lui/lei ha, noi abbiamo, voi avete, loro hanno.
+Используется также для возраста (Ho 20 anni) и состояний (Ho fame — я голоден, Ho freddo — мне холодно)."],
+  ["6. Настоящее время (Presente)","Три группы правильных глаголов:
+• -ARE (parlare): -o, -i, -a, -iamo, -ate, -ano
+• -ERE (prendere): -o, -i, -e, -iamo, -ete, -ono
+• -IRE (dormire): -o, -i, -e, -iamo, -ite, -ono
+Часть глаголов на -ire (capire, finire, preferire) перед окончаниями -o, -i, -e, -ono вставляют -isc-: capisco, capisci, capisce, capiamo, capite, capiscono."],
+  ["7. Прошедшее время (Passato prossimo)","Образуется из 2 частей: вспомогательный глагол (avere или essere) + причастие:
+• -are → -ato (mangiato)
+• -ere → -uto (avuto)
+• -ire → -ito (dormito)
+Неправильные причастия: fare → fatto, vedere → visto, prendere → preso, aprire → aperto, scrivere → scritto.
+С глаголом essere причастие согласуется в роде и числе: Marco è andato / Anna è andata."]
 ];
 
-function gram(){gback=view;view="gram";render()}
+function gram(){gback=view;view="gram";render();window.scrollTo(0,0)}
 function rGram(){
-  var h='<button class="l" onclick="go(gback)">← Назад</button><h1>📖 Грамматика</h1><p class="mut">Нажмите на тему, чтобы открыть объяснение.</p>';
+  var h='<button class="l" onclick="go(gback)">← Назад</button><h1>📖 Грамматика и правописание</h1><p class="mut">Нажмите на раздел, чтобы раскрыть правила.</p>';
   GR.forEach(function(g){
-    h+='<details><summary>'+g[0]+'</summary><div style="white-space:pre-line;padding:6px 0 4px">'+g[1]+'</div></details>';
+    h+='<details class="glass-sm"><summary>'+g[0]+'</summary><div style="white-space:pre-line;padding:8px 0 4px;font-size:15px">'+g[1]+'</div></details>';
   });
   app.innerHTML=h;
 }
@@ -521,22 +592,30 @@ function insertChar(ch){
 
 function play(t){
   var l=L();
-  var w=t==="pics"?l.words.filter(function(x){return x.em}):t==="sent"?(l.sents||[]):l.words;
+  var w;
+  if(t==="pics")w=l.words.filter(function(x){return x.em});
+  else if(t==="sent")w=(l.sents||[]);
+  else if(t==="dict")w=l.words.concat((l.sents||[]).map(function(s){return{it:s.it,ru:s.ru,isSent:true}}));
+  else w=l.words;
+
   if(!w.length){
-    alert(t==="pics"?"Добавьте слова с картинкой-эмодзи.":t==="sent"?"Добавьте предложения в уроке.":"В уроке нет слов.");
+    alert(t==="pics"?"В этом уроке нет слов с эмодзи.":t==="sent"?"В этом уроке пока нет предложений.":"В уроке нет слов.");
     return;
   }
   var pl=l.words.length>=4?l.words:allw();
   P={
     t:t,
+    lessonId:l.id,
     q:shuffle(w).map(function(x){
-      return{w:x,side:t==="pics"?"em":mode==="mix"?(Math.random()<.5?"it":"ru"):mode};
+      var sd=(t==="pics")?"em":(t==="dict")?"dict":(mode==="mix"?(Math.random()<.5?"it":"ru"):mode);
+      return{w:x,side:sd};
     }),
     i:0,n:w.length,ok:0,err:[],res:null,pool:pl,hard:hard
   };
   setQ();
   view="game";
   render();
+  if(P.t==="dict"||P.q[0].side==="it")say(P.q[0].w.it);
 }
 
 function setQ(){
@@ -546,7 +625,7 @@ function setQ(){
   if(P.t==="sent"){
     P.tk=c.w.it.split(/\s+/);
     P.ord=shuffle(P.tk.map(function(_,i){return i}));
-  }else if(!P.hard){
+  }else if(P.t!=="dict"&&!P.hard){
     var o=[A(c)];
     shuffle(P.pool).forEach(function(x){
       var a=c.side==="it"?x.ru:x.it;
@@ -558,8 +637,14 @@ function setQ(){
 
 function fin(ok){
   var c=P.q[P.i];
-  if(P.t!=="sent"){markSRS(c.w,ok);save();}
-  if(ok)P.ok++;else P.err.push(c);
+  if(P.t!=="sent"&&!c.w.isSent){markSRS(c.w,ok);}
+  if(ok){
+    P.ok++;
+    addXP(P.t==="dict"?10:6);
+  }else{
+    P.err.push(c);
+    save();
+  }
   P.res=ok;
   render();
 }
@@ -570,20 +655,30 @@ function ansType(){
   var v=document.getElementById("ty").value;
   if(!v.trim())return;
   P.pick=v;
-  fin(A(P.q[P.i]).split("/").some(function(x){return norm(x)===norm(v)}));
+  var target=(P.t==="dict")?P.q[P.i].w.it:A(P.q[P.i]);
+  fin(target.split("/").some(function(x){return norm(x)===norm(v)}));
 }
 function tap(i){if(P.res!==null)return;P.ch.push(i);render()}
 function untap(k){if(P.res!==null)return;P.ch.splice(k,1);render()}
 function chk(){fin(norm(P.ch.map(function(i){return P.tk[i]}).join(" "))===norm(P.q[P.i].w.it))}
-function nxt(){P.i++;setQ();render()}
-function again(){P.q=shuffle(P.err);P.n=P.q.length;P.err=[];P.ok=0;P.i=0;setQ();render()}
+function nxt(){
+  P.i++;
+  setQ();
+  if(P.i>=P.q.length){
+    if(P.lessonId)D.completed[P.lessonId]=(D.completed[P.lessonId]||0)+1;
+    addXP(30,"Тренировка завершена!");
+  }
+  render();
+  if(P.i<P.q.length&&(P.t==="dict"||P.q[P.i].side==="it"))say(P.q[P.i].w.it);
+}
+function again(){P.q=shuffle(P.err);P.n=P.q.length;P.err=[];P.ok=0;P.i=0;setQ();render();if(P.t==="dict")say(P.q[0].w.it)}
 function hint(){P.hint=!P.hint;render()}
 
 function ex(i){
   var t=P.tk[i],k=t.toLowerCase().replace(/[^\p{L}]/gu,""),g=GL[k];
   if(!g){
     var m=allw().find(function(x){return norm(x.it)===norm(t)});
-    g=m?"«"+m.ru+"» (из ваших слов)":"подсказки нет. Добавьте слово в словарь урока.";
+    g=m?"«"+m.ru+"» (из словаря курса)":"нажмите 🔊 в уроке, чтобы послушать слово.";
   }
   P.ex=t+" — "+g;
   render();
@@ -591,29 +686,43 @@ function ex(i){
 
 function rGame(){
   if(P.i>=P.q.length){
-    var h='<h1>Готово! 🎉</h1><p>Верно с первого раза: <b>'+P.ok+' из '+P.n+'</b></p>';
+    var h='<div class="glass" style="padding:24px;text-align:center;margin-top:16px"><h1>Отлично! 🎉</h1><p style="font-size:18px">Верно с первого раза: <b>'+P.ok+' из '+P.n+'</b></p><p class="badge xp" style="margin-bottom:16px">+30 XP бонус</p>';
     if(P.err.length)h+='<button class="p" style="width:100%;margin-bottom:8px" onclick="again()">Повторить ошибки ('+P.err.length+')</button>';
-    app.innerHTML=h+'<button style="width:100%" onclick="go(\'lesson\')">К уроку</button>';
+    h+='<button style="width:100%" onclick="go(\'lesson\')">Вернуться к уроку</button></div>';
+    app.innerHTML=h;
     return;
   }
   var c=P.q[P.i],r=P.res;
   var h='<div class="row" style="margin-bottom:12px"><button class="l" style="flex:0 0 auto" onclick="go(\'lesson\')">← Выйти</button><span class="mut" style="text-align:right">'+(P.i+1)+' / '+P.q.length+'</span></div><div class="bar"><i style="width:'+(P.i/P.q.length*100)+'%"></i></div>';
-  var ans=P.t==="sent"?c.w.it:A(c),hn;
+  var ans=(P.t==="sent"||P.t==="dict")?c.w.it:A(c),hn;
 
-  if(P.t==="sent"){
-    h+='<div class="card" style="cursor:default"><div class="lb">Соберите по-итальянски</div><div class="t" style="font-size:24px">'+esc(c.w.ru)+'</div></div>';
-    h+='<div style="min-height:56px;border-bottom:2px solid var(--bd);padding:6px 0;margin-bottom:12px">'+P.ch.map(function(i,k){return '<button style="margin:3px" onclick="untap('+k+')">'+esc(P.tk[i])+'</button>'}).join('')+'</div>';
+  if(P.t==="dict"){
+    h+='<div class="card glass" style="cursor:default"><div class="lb">🎧 Диктант · Напишите услышанное</div>';
+    h+='<div class="row" style="width:100%;max-width:300px;margin:8px 0"><button class="p" onclick="say(P.q[P.i].w.it,false)">🔊 Обычная</button><button onclick="say(P.q[P.i].w.it,true)">🐢 Медленно</button></div>';
+    h+='<div class="mut" style="margin-top:8px">Перевод: '+esc(c.w.ru)+'</div></div>';
     if(r===null){
-      h+=P.ord.filter(function(i){return P.ch.indexOf(i)<0}).map(function(i){return '<button style="margin:3px" onclick="tap('+i+')">'+esc(P.tk[i])+'</button>'}).join('');
+      h+='<div class="chars">'+["à","è","é","ì","ò","ù","’"].map(function(ch){
+        return '<button type="button" onclick="insertChar(\''+ch+'\')">'+ch+'</button>';
+      }).join('')+'</div>';
+    }
+    h+='<input id="ty" placeholder="Напишите по-итальянски..." autocapitalize="off" autocomplete="off" '+(r!==null?'disabled value="'+esc(P.pick)+'"':'')+' onkeydown="if(event.key===\'Enter\')ansType()">';
+    if(r===null)h+='<button class="p" style="width:100%" onclick="ansType()">Проверить диктант</button>';
+    hn="Слово/фраза начинается на «"+ans.slice(0,2)+"…», символов: "+ans.length+(c.w.tr?" (читается: "+c.w.tr+")":"");
+  }else if(P.t==="sent"){
+    h+='<div class="card glass" style="cursor:default"><div class="lb">🧩 Соберите по-итальянски</div><div class="t" style="font-size:23px">'+esc(c.w.ru)+'</div></div>';
+    h+='<div class="glass-sm" style="min-height:58px;padding:8px;margin-bottom:12px">'+P.ch.map(function(i,k){return '<button style="margin:3px;padding:8px 12px" onclick="untap('+k+')">'+esc(P.tk[i])+'</button>'}).join('')+'</div>';
+    if(r===null){
+      h+=P.ord.filter(function(i){return P.ch.indexOf(i)<0}).map(function(i){return '<button style="margin:3px;padding:8px 12px" onclick="tap('+i+')">'+esc(P.tk[i])+'</button>'}).join('');
       if(P.ch.length===P.tk.length)h+='<button class="p" style="width:100%;margin-top:12px" onclick="chk()">Проверить</button>';
     }
-    hn="Первое слово: «"+P.tk[0]+"». Слов в предложении: "+P.tk.length+".";
+    hn="Первое слово: «"+P.tk[0]+"». Всего слов: "+P.tk.length+".";
   }else{
-    var pr=c.side==="em"?'<div style="font-size:72px;line-height:1.1">'+esc(c.w.em)+'</div>':'<div class="t">'+esc(c.side==="it"?c.w.it:c.w.ru)+'</div>';
-    h+='<div class="card" style="cursor:default"><div class="lb">'+(c.side==="em"?"Что это? Назовите по-итальянски":c.side==="it"?"Переведите на русский":"Переведите на итальянский")+'</div>'+pr+'</div>';
+    var pr=c.side==="em"?'<div style="font-size:74px;line-height:1.1">'+esc(c.w.em)+'</div>':'<div class="t">'+esc(c.side==="it"?c.w.it:c.w.ru)+'</div>';
+    var trLine=(c.side==="it"&&c.w.tr)?'<div class="tr">['+esc(c.w.tr)+']</div>':'';
+    h+='<div class="card glass" style="cursor:default"><div class="lb">'+(c.side==="em"?"🖼 Назовите по-итальянски":c.side==="it"?"Переведите на русский":"Переведите на итальянский")+'</div>'+pr+trLine+'</div>';
     if(P.hard){
       if(r===null&&c.side!=="it"){
-        h+='<div class="chars">'+["à","è","é","ì","ò","ù"].map(function(ch){
+        h+='<div class="chars">'+["à","è","é","ì","ò","ù","’"].map(function(ch){
           return '<button type="button" onclick="insertChar(\''+ch+'\')">'+ch+'</button>';
         }).join('')+'</div>';
       }
@@ -621,7 +730,7 @@ function rGame(){
       if(r===null)h+='<button class="p" style="width:100%" onclick="ansType()">Проверить</button>';
     }else{
       h+=P.opts.map(function(o,i){
-        var st=r!==null?(o===ans?' style="background:var(--ac);color:var(--acfg);border-color:var(--ac)"':(o===P.pick?' style="border-color:var(--bad);color:var(--bad)"':'')):'';
+        var st=r!==null?(o===ans?' style="background:var(--ac-grad);color:var(--acfg);border-color:transparent"':(o===P.pick?' style="border-color:var(--bad);color:var(--bad)"':'')):'';
         return '<button class="item"'+st+' onclick="ansOpt('+i+')">'+esc(o)+'</button>';
       }).join('');
     }
@@ -630,21 +739,21 @@ function rGame(){
   }
 
   if(r!==null){
-    h+='<p style="font-weight:600;color:'+(r?'var(--ac)':'var(--bad)')+'">'+(r?'✅ Верно!':'❌ Правильно: '+esc(ans))+'</p>';
+    h+='<div class="glass-sm" style="padding:12px 14px;margin-top:12px"><p style="margin:0;font-weight:700;color:'+(r?'var(--ac)':'var(--bad)')+'">'+(r?'✅ Верно!':'❌ Правильно: '+esc(ans))+'</p>';
     if(P.t==="sent"){
-      h+='<p class="mut">Нажмите на слово для разбора:</p><div>'+P.tk.map(function(t,i){
-        return '<button style="margin:3px" onclick="ex('+i+')">'+esc(t)+'</button>';
-      }).join('')+'</div>'+(P.ex?'<p style="background:var(--card);padding:10px 12px;border-radius:10px;border:1px solid var(--bd)">'+esc(P.ex)+'</p>':'');
+      h+='<p class="mut" style="margin:8px 0 4px">Нажмите на слово для перевода:</p><div>'+P.tk.map(function(t,i){
+        return '<button style="margin:3px;padding:6px 10px;font-size:14px" onclick="ex('+i+')">'+esc(t)+'</button>';
+      }).join('')+'</div>'+(P.ex?'<p style="margin:8px 0 0;font-size:14px">'+esc(P.ex)+'</p>':'');
     }
-    h+='<button class="p" style="width:100%;margin-top:12px" onclick="nxt()">Дальше</button>';
+    h+='</div><button class="p" style="width:100%;margin-top:12px" onclick="nxt()">Дальше →</button>';
   }else if(P.hint){
     h+='<p class="mut" style="margin-top:12px">💡 '+esc(hn)+'</p>';
   }
 
-  var canSpeak=(P.t!=="sent"&&(c.side==="it"||r!==null))||(P.t==="sent"&&r!==null);
-  h+='<div class="row" style="margin-top:12px"><button onclick="hint()">💡 Подсказка</button><button onclick="gram()">📖 Грамматика</button>'+(canSpeak?'<button onclick="say(P.q[P.i].w.it)">🔊 Озвучить</button>':'')+'</div>';
+  var canSpeak=(P.t!=="dict")&&((P.t!=="sent"&&(c.side==="it"||r!==null))||(P.t==="sent"&&r!==null));
+  h+='<div class="row" style="margin-top:12px"><button onclick="hint()">💡 Подсказка</button><button onclick="gram()">📖 Правила</button>'+(canSpeak?'<button onclick="say(P.q[P.i].w.it)">🔊 Слушать</button>':'')+'</div>';
   app.innerHTML=h;
-  if(P.hard&&r===null){var ty=document.getElementById("ty");if(ty)ty.focus();}
+  if((P.hard||P.t==="dict")&&r===null){var ty=document.getElementById("ty");if(ty)ty.focus();}
 }
 
 function render(){
@@ -652,79 +761,136 @@ function render(){
   if(view==="gram"){rGram();return}
 
   if(view==="home"){
-    var due=dueWords(),total=allw().length,learned=allw().filter(function(w){return(w.lv||0)>=2}).length;
-    var h='<h1>🇮🇹 Итальянские карточки</h1>';
-    h+='<div class="card" style="min-height:auto;cursor:default;align-items:stretch;text-align:left;padding:16px;margin:0 0 16px">';
-    h+='<div class="row" style="margin-bottom:10px"><div><div class="mut">Выучено слов</div><b style="font-size:20px">'+learned+' из '+total+'</b></div><div style="text-align:right"><div class="mut">К повторению</div><b style="font-size:20px;color:'+(due.length?'var(--warn)':'var(--ac)')+'">'+due.length+'</b></div></div>';
+    var due=dueWords(),total=allw().length,learned=allw().filter(function(w){return(w.lv||0)>=1}).length;
+    var doneLessons=Object.keys(D.completed||{}).length;
+    var h='<div class="row" style="justify-content:space-between;margin-bottom:8px"><h1>🇮🇹 Italiano</h1><span class="badge xp">⚡ '+(D.xp||0)+' XP · 🔥 '+(D.streak||1)+' дн.</span></div>';
+
+    h+='<div class="glass" style="padding:16px;margin-bottom:16px">';
+    h+='<div class="row" style="margin-bottom:12px"><div><div class="mut">Уровень: <b>'+getRank(D.xp||0)+'</b></div><div style="font-size:18px;font-weight:700;margin-top:2px">Уроков: '+doneLessons+'/'+D.lessons.length+' · Слов: '+learned+'/'+total+'</div></div></div>';
     h+='<button class="p" style="width:100%" onclick="startReview()"'+(due.length?'':' disabled')+'>🔥 Повторить слова на сегодня ('+due.length+')</button>';
     h+='</div>';
 
-    D.lessons.forEach(function(l){
+    h+='<div class="seg" style="margin-bottom:14px">';
+    h+='<button class="'+(monthTab===1?"on":"")+'" onclick="monthTab=1;render()">Месяц 1 · Основа</button>';
+    h+='<button class="'+(monthTab===2?"on":"")+'" onclick="monthTab=2;render()">Месяц 2 · Общение</button>';
+    h+='<button class="'+(monthTab===3?"on":"")+'" onclick="monthTab=3;render()">Месяц 3 · Свободно</button>';
+    h+='</div>';
+
+    D.lessons.filter(function(l){return(l.m||1)===monthTab}).forEach(function(l){
+      var isDone=!!(D.completed&&D.completed[l.id]);
       var lDue=l.words.filter(isDue).length;
-      h+='<button class="item" onclick="go(\'lesson\','+l.id+')"><span>'+esc(l.name)+'</span><span class="badge '+(lDue?'due':'ok')+'">'+(lDue?lDue+' повт.':'✓ '+l.words.length)+'</span></button>';
+      var badge=isDone?'<span class="badge ok">✓ Пройден</span>':'<span class="badge due">'+l.words.length+' сл.</span>';
+      h+='<button class="item" onclick="go(\'lesson\','+l.id+')"><span style="font-weight:600">'+esc(l.name)+'</span>'+badge+'</button>';
     });
-    h+='<button class="item" onclick="gram()"><span>📖 Грамматика и подсказки</span><span class="mut">›</span></button>';
-    h+='<h2 style="margin-top:20px;margin-bottom:8px">Новый урок</h2><input id="ln" placeholder="Например: Урок 5 — Путешествия" onkeydown="if(event.key===\'Enter\')addLesson()"><button class="p" style="width:100%" onclick="addLesson()">Создать урок</button>';
-    h+='<details style="margin-top:20px"><summary>Копия и перенос слов</summary><textarea id="bkp" rows="4" placeholder="Вставьте код копии сюда" style="margin-top:8px"></textarea><div class="row"><button onclick="exportAll()">Скопировать всё</button><button onclick="importAll()">Импортировать</button></div></details>';
+
+    h+='<button class="item" style="margin-top:6px" onclick="gram()"><span style="font-weight:600">📖 Справочник грамматики и чтения</span><span class="mut">›</span></button>';
+
+    h+='<details class="glass-sm" style="margin-top:16px"><summary>+ Добавить свой урок или перенести прогресс</summary>';
+    h+='<div style="margin-top:10px"><input id="ln" placeholder="Название урока (в выбранный месяц)"><button class="p" style="width:100%;margin-bottom:12px" onclick="addLesson()">Создать урок</button>';
+    h+='<textarea id="bkp" rows="3" placeholder="Код резервной копии"></textarea><div class="row"><button onclick="exportAll()">Скопировать прогресс</button><button onclick="importAll()">Восстановить</button></div></div></details>';
     app.innerHTML=h;
     return;
   }
 
   if(view==="lesson"){
     var l=L();
-    var h='<button class="l" onclick="go(\'home\')">← Все уроки</button><h1>'+esc(l.name)+'</h1>';
-    h+='<div class="row seg" style="margin-bottom:8px"><button class="'+(mode==="it"?"on":"")+'" onclick="setMode(\'it\')">Итал. → рус.</button><button class="'+(mode==="ru"?"on":"")+'" onclick="setMode(\'ru\')">Рус. → итал.</button><button class="'+(mode==="mix"?"on":"")+'" onclick="setMode(\'mix\')">Вперемешку</button></div>';
+    var h='<button class="l" onclick="go(\'home\')">← К плану обучения</button><h1>'+esc(l.name)+'</h1>';
+
+    if(l.rule){
+      h+='<details class="glass-sm" open style="margin-bottom:14px"><summary>💡 Правило и шпаргалка к уроку</summary><div class="rule-box" style="padding:8px 0 0;margin:0">'+esc(l.rule)+'</div></details>';
+    }
+
+    h+='<div class="seg" style="margin-bottom:10px"><button class="'+(mode==="it"?"on":"")+'" onclick="setMode(\'it\')">Итал. → рус.</button><button class="'+(mode==="ru"?"on":"")+'" onclick="setMode(\'ru\')">Рус. → итал.</button><button class="'+(mode==="mix"?"on":"")+'" onclick="setMode(\'mix\')">Вперемешку</button></div>';
+
     var dis=l.words.length?'':' disabled';
-    h+='<button class="p" style="width:100%;margin-bottom:8px" onclick="start()"'+dis+'>🃏 Карточки ('+l.words.length+')</button>';
-    h+='<div class="row" style="margin-bottom:8px"><button onclick="play(\'quiz\')"'+dis+'>🔤 Выбор перевода</button><button onclick="play(\'pics\')">🖼 Картинки</button></div>';
-    h+='<div class="row" style="margin-bottom:8px"><button onclick="play(\'sent\')">🧩 Предложения</button><button onclick="gram()">📖 Грамматика</button></div>';
-    h+='<label class="mut" style="display:block;margin-bottom:16px"><input type="checkbox" style="width:auto;margin:0 8px 0 0" '+(hard?'checked':'')+' onchange="hard=this.checked">Сложный режим: вводить ответ с клавиатуры</label>';
+    h+='<button class="p" style="width:100%;margin-bottom:8px" onclick="start()"'+dis+'>🃏 Учить карточки ('+l.words.length+')</button>';
+    h+='<div class="grid2">';
+    h+='<button onclick="play(\'quiz\')"'+dis+'>🔤 Тест</button>';
+    h+='<button onclick="play(\'pics\')">🖼 Картинки</button>';
+    h+='<button onclick="play(\'dict\')"'+dis+'>🎧 Диктант</button>';
+    h+='<button onclick="play(\'sent\')">🧩 Фразы</button>';
+    h+='</div>';
+    h+='<label class="mut" style="display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer"><input type="checkbox" style="width:auto;margin:0" '+(hard?'checked':'')+' onchange="hard=this.checked">Сложный режим в тесте (ввод с клавиатуры)</label>';
 
-    h+='<h2>Добавить слово</h2><div style="margin-top:8px"><input id="wi" placeholder="По-итальянски" autocapitalize="off"><input id="wr" placeholder="По-русски"><input id="we" placeholder="Картинка-эмодзи, необязательно (🐱)" onkeydown="if(event.key===\'Enter\')addWord()"><button class="p" style="width:100%" onclick="addWord()">Добавить</button></div>';
-    h+='<details><summary>Добавить сразу много слов</summary><textarea id="bk" rows="5" style="margin-top:8px" placeholder="gatto - кошка - 🐱&#10;cane - собака"></textarea><button style="width:100%" onclick="addBulk()">Добавить списком</button></details>';
-
-    h+='<details><summary>Предложения ('+(l.sents||[]).length+')</summary><div style="margin-top:8px"><input id="si" placeholder="Предложение по-итальянски"><input id="sr" placeholder="Перевод на русский"><button class="p" style="width:100%;margin-bottom:8px" onclick="addSent()">Добавить предложение</button>'+(l.sents||[]).map(function(x,i){
-      return '<div class="w"><div><b>'+esc(x.it)+'</b><span class="mut">'+esc(x.ru)+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" onclick="say(L().sents['+i+'].it)">🔊</button><button class="x d" onclick="delSent('+i+')">✕</button></div></div>';
-    }).join('')+'</div></details>';
-
-    h+='<h2 style="margin-top:16px">Слова ('+l.words.length+')</h2>';
-    if(!l.words.length)h+='<p class="mut">Пока пусто — добавьте первое слово.</p>';
+    h+='<div class="row" style="justify-content:space-between;margin-bottom:8px"><h2>Слова урока ('+l.words.length+')</h2><button class="x" onclick="say(L().words.map(function(x){return x.it}).join(\'. \'))">🔊 Все слова</button></div>';
+    if(!l.words.length)h+='<p class="mut">Пока пусто — добавьте слова ниже.</p>';
     l.words.forEach(function(w,i){
       if(editIdx===i){
-        h+='<div style="padding:10px 0;border-bottom:1px solid var(--bd)"><input id="ewi" value="'+esc(w.it)+'" placeholder="По-итальянски"><input id="ewr" value="'+esc(w.ru)+'" placeholder="По-русски"><input id="ewe" value="'+esc(w.em||"")+'" placeholder="Эмодзи"><div class="row"><button class="p" onclick="saveEditWord('+i+')">Сохранить</button><button onclick="cancelEditWord()">Отмена</button></div></div>';
+        h+='<div class="glass-sm" style="padding:12px;margin-bottom:8px"><input id="ewi" value="'+esc(w.it)+'" placeholder="По-итальянски"><input id="ewr" value="'+esc(w.ru)+'" placeholder="По-русски"><input id="ewt" value="'+esc(w.tr||"")+'" placeholder="Произношение (например: ча́о)"><input id="ewe" value="'+esc(w.em||"")+'" placeholder="Эмодзи"><div class="row"><button class="p" onclick="saveEditWord('+i+')">Сохранить</button><button onclick="cancelEditWord()">Отмена</button></div></div>';
       }else{
         var stars=w.lv?(' · '+'★'.repeat(Math.min(w.lv,5))):'';
-        h+='<div class="w"><div><b>'+(w.em?esc(w.em)+' ':'')+esc(w.it)+'</b><span class="mut">'+esc(w.ru)+stars+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" onclick="say(L().words['+i+'].it)">🔊</button><button class="x" onclick="startEditWord('+i+')">✎</button><button class="x d" onclick="delWord('+i+')">✕</button></div></div>';
+        var trHtml=w.tr?'<span class="tr">['+esc(w.tr)+']</span> ':'';
+        h+='<div class="w"><div><b>'+(w.em?esc(w.em)+' ':'')+esc(w.it)+'</b>'+trHtml+'<span class="mut">'+esc(w.ru)+stars+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" title="Обычная скорость" onclick="say(L().words['+i+'].it,false)">🔊</button><button class="x" title="Медленно" onclick="say(L().words['+i+'].it,true)">🐢</button><button class="x" onclick="startEditWord('+i+')">✎</button><button class="x d" onclick="delWord('+i+')">✕</button></div></div>';
       }
     });
-    h+='<button style="width:100%;margin-top:24px" onclick="shareLesson()">Поделиться уроком (ссылкой)</button>';
-    h+='<button class="d" style="width:100%;margin-top:8px" onclick="delLesson()">Удалить урок</button>';
+
+    h+='<h2 style="margin-top:18px;margin-bottom:8px">Фразы и диалоги ('+(l.sents||[]).length+')</h2>';
+    (l.sents||[]).forEach(function(x,i){
+      h+='<div class="w"><div><b>'+esc(x.it)+'</b><span class="mut">'+esc(x.ru)+'</span></div><div class="row" style="flex:0 0 auto"><button class="x" onclick="say(L().sents['+i+'].it,false)">🔊</button><button class="x" onclick="say(L().sents['+i+'].it,true)">🐢</button><button class="x d" onclick="delSent('+i+')">✕</button></div></div>';
+    });
+
+    h+='<details class="glass-sm" style="margin-top:16px"><summary>+ Добавить свои слова или фразы в этот урок</summary>';
+    h+='<div style="margin-top:10px"><input id="wi" placeholder="Слово по-итальянски" autocapitalize="off"><input id="wr" placeholder="Перевод на русский"><input id="wt" placeholder="Транскрипция (необязательно)"><input id="we" placeholder="Эмодзи (необязательно)"><button class="p" style="width:100%;margin-bottom:12px" onclick="addWord()">Добавить слово</button>';
+    h+='<input id="si" placeholder="Новая фраза по-итальянски"><input id="sr" placeholder="Перевод фразы"><button style="width:100%;margin-bottom:12px" onclick="addSent()">Добавить фразу</button>';
+    h+='<textarea id="bk" rows="4" placeholder="Массово: слово - перевод - 🐱"></textarea><button style="width:100%" onclick="addBulk()">Добавить списком</button></div></details>';
+
+    h+='<button style="width:100%;margin-top:16px" onclick="shareLesson()">Поделиться уроком</button>';
+    if(l.id>24)h+='<button class="d" style="width:100%;margin-top:8px" onclick="delLesson()">Удалить урок</button>';
     app.innerHTML=h;
     return;
   }
 
   if(view==="study"){
     if(!S.q.length){
-      app.innerHTML='<h1>Готово! 🎉</h1><p>Вы прошли все <b>'+S.n+'</b> карточек.</p><button class="p" style="width:100%;margin-bottom:8px" onclick="start()">Ещё раз</button><button style="width:100%" onclick="go(\''+(S.isGlobal?'home':'lesson')+'\')">'+(S.isGlobal?'На главную':'К уроку')+'</button>';
+      app.innerHTML='<div class="glass" style="padding:24px;text-align:center;margin-top:16px"><h1>Готово! 🎉</h1><p style="font-size:18px">Вы прошли все <b>'+S.n+'</b> карточек.</p><p class="badge xp" style="margin-bottom:16px">+25 XP бонус</p><button class="p" style="width:100%;margin-bottom:8px" onclick="start()">Пройти ещё раз</button><button style="width:100%" onclick="go(\''+(S.isGlobal?'home':'lesson')+'\')">'+(S.isGlobal?'На главную':'К уроку')+'</button></div>';
       return;
     }
     var c=S.q[0],w=c.w,front=c.side==="it"?w.it:w.ru,back=c.side==="it"?w.ru:w.it;
     var h='<div class="row" style="margin-bottom:12px"><button class="l" style="flex:0 0 auto" onclick="go(\''+(S.isGlobal?'home':'lesson')+'\')">← Выйти</button><span class="mut" style="text-align:right">Выучено '+S.known+' из '+S.n+'</span></div><div class="bar"><i style="width:'+(S.known/S.n*100)+'%"></i></div>';
-    h+='<div class="card" onclick="'+(S.flip?'':'flip()')+'"><div class="lb">'+(c.side==="it"?"Итальянский":"Русский")+'</div><div class="t">'+esc(front)+'</div>';
-    if(S.flip)h+='<hr style="width:60%;border:0;border-top:1px solid var(--bd);margin:20px 0"><div class="lb">'+(c.side==="it"?"Русский":"Итальянский")+'</div><div class="t">'+(w.em?esc(w.em)+' ':'')+esc(back)+'</div>';
-    else h+='<div class="mut" style="margin-top:20px">Скажите вслух, потом нажмите на карточку</div>';
-    h+='</div><button style="width:100%;margin-bottom:8px" onclick="say(S.q[0].w.it)">🔊 Послушать по-итальянски</button>';
-    if(S.flip)h+='<div class="row"><button class="d" onclick="answer(false)">Не знаю</button><button class="p" onclick="answer(true)">Знаю</button></div>';
+    h+='<div class="card glass" onclick="'+(S.flip?'':'flip()')+'"><div class="lb">'+(c.side==="it"?"Итальянский":"Русский")+'</div><div class="t">'+(c.side==="it"&&w.em?esc(w.em)+' ':'')+esc(front)+'</div>';
+    if(c.side==="it"&&w.tr)h+='<div class="tr">['+esc(w.tr)+']</div>';
+    if(S.flip){
+      h+='<hr style="width:60%;border:0;border-top:1px solid var(--glass-border);margin:20px 0"><div class="lb">'+(c.side==="it"?"Русский":"Итальянский")+'</div><div class="t">'+(w.em?esc(w.em)+' ':'')+esc(back)+'</div>';
+      if(c.side==="ru"&&w.tr)h+='<div class="tr">['+esc(w.tr)+']</div>';
+    }else{
+      h+='<div class="mut" style="margin-top:20px">Произнесите вслух, затем нажмите на карточку</div>';
+    }
+    h+='</div><div class="row" style="margin-bottom:8px"><button onclick="say(S.q[0].w.it,false)">🔊 Обычная озвучка</button><button onclick="say(S.q[0].w.it,true)">🐢 Медленно</button></div>';
+    if(S.flip)h+='<div class="row"><button class="d" onclick="answer(false)">Не знаю</button><button class="p" onclick="answer(true)">Знаю (+5 XP)</button></div>';
     app.innerHTML=h;
     return;
   }
+}
+
+function shareLesson(){
+  var l=L();
+  var cleanWords=l.words.map(function(w){return{it:w.it,ru:w.ru,em:w.em||"",tr:w.tr||""}});
+  var p=btoa(unescape(encodeURIComponent(JSON.stringify({name:l.name,m:l.m||1,rule:l.rule||"",words:cleanWords,sents:l.sents||[]})))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  try{navigator.clipboard.writeText(p).then(function(){toast("Код урока скопирован!")})}catch(e){prompt("Скопируйте код:",p)}
+}
+function exportAll(){
+  var t=document.getElementById("bkp");
+  t.value=btoa(unescape(encodeURIComponent(JSON.stringify(D)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  t.select();
+  try{navigator.clipboard.writeText(t.value).then(function(){toast("Прогресс скопирован!")})}catch(e){}
+}
+function importAll(){
+  var v=document.getElementById("bkp").value.trim().replace(/^.*#l=/,"");
+  try{
+    v=v.replace(/-/g,"+").replace(/_/g,"/");while(v.length%4)v+="=";
+    var o=JSON.parse(decodeURIComponent(escape(atob(v))));
+    if(o.lessons){D=normalizeData(o);save();toast("Прогресс восстановлен!");render();}
+    else if(o.name&&o.words){
+      D.lessons.push({id:Date.now(),m:o.m||1,name:o.name,rule:o.rule||"",words:o.words,sents:o.sents||[]});
+      save();toast("Урок добавлен!");render();
+    }
+  }catch(e){alert("Не удалось прочитать код.")}
 }
 
 if(tg){try{tg.ready();tg.expand()}catch(e){}}
 load(function(){
   save();
   render();
-  checkHash();
 });
 </script>
 </body>
